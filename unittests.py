@@ -3,179 +3,176 @@
 
 
 import unittest
-import Tree
-import Datum
-import Goal
-import Actor
-import Disclosure
-import Mitigation
-import Impact
+from main import *
 
 class unittests(unittest.TestCase):
     def setUp(self):
-        self.testTree1 = Tree()
-        self.testTree2 = Tree()        
-        self.testTree3 = Tree()
+        self.test_tree1 = Tree()
+        self.test_tree2 = Tree()        
+        self.test_tree3 = Tree()
 
-        self.testData1 = Datum('Test Data 1')
-        self.testData2 = Datum('Test Data 2')
-        self.testData3 = Datum('Test Data 3')
-        self.testData4 = Datum('Test Data 4')
-        self.testGoal1 = Goal('Test Goal 1')
-        self.testGoal2 = Goal('Test Goal 2')
-        self.testGoal3 = Goal('Test Goal 3')
-        self.testGoal4 = Goal('Test Goal 4')
-        self.testActor1 = Actor('Test Actor 1', [self.testGoal1, self.testGoal2], [self.testData1, self.testData2])
-        self.testActor2 = Actor('Test Actor 2', [self.testGoal3, self.testGoal4], [self.testData3, self.testData4])
-        self.testActors = {self.testActor1.name: self.testActor1, self.testActor2.name: self.testActor2}
-        self.testDisclosure1 = Disclosure(self.testActor1, self.testData1, self.testActor2, 'Purpose 1')
-        self.testDisclosure2 = Disclosure(self.testActor2, self.testData3, self.testActor1, 'Purpose 2')
-        self.testDisclosures = [self.testDisclosure1, self.testDisclosure2]
-        self.testMitigation1 = Mitigation(self.testDisclosure2, 'Anonymity', 'Test Mitigation Description 1')
-        self.testMitigation2 = Mitigation(self.testDisclosure2, 'Limit Audience', 'Test Mitigation Desecription 2')
-        self.testMitigation3 = Mitigation(self.testDisclosure1, 'Notice', 'Test Mitigation Desecription 3')
-        self.testMitigations = [self.testMitigation1, self.testMitigation2, self.testMitigation3]
-        self.testImpact1 = Impact(self.testMitigation2, 0)
+        self.test_data1 = Datum('Test Data 1')
+        self.test_data2 = Datum('Test Data 2')
+        self.test_data3 = Datum('Test Data 3')
+        self.test_data4 = Datum('Test Data 4')
+        self.test_goal1 = Goal('Test Goal 1')
+        self.test_goal2 = Goal('Test Goal 2')
+        self.test_goal3 = Goal('Test Goal 3')
+        self.test_goal4 = Goal('Test Goal 4')
+        self.test_actor1 = Actor('Test Actor 1', [self.test_goal1, self.test_goal2], [self.test_data1, self.test_data2])
+        self.test_actor2 = Actor('Test Actor 2', [self.test_goal3, self.test_goal4], [self.test_data3, self.test_data4])
+        self.test_actors = [self.test_actor1, self.test_actor2]
+        self.test_disclosure1 = Disclosure(self.test_actor1, self.test_data1, self.test_actor2, 'Purpose 1')
+        self.test_disclosure2 = Disclosure(self.test_actor2, self.test_data3, self.test_actor1, 'Purpose 2')
+        self.test_disclosures = [self.test_disclosure1, self.test_disclosure2]
+        self.test_mitigation1 = Mitigation(self.test_disclosure2, 'Anonymity', 'Test Mitigation Description 1')
+        self.test_mitigation2 = Mitigation(self.test_disclosure2, 'Limit Audience', 'Test Mitigation Desecription 2')
+        self.test_mitigation3 = Mitigation(self.test_disclosure1, 'Notice', 'Test Mitigation Desecription 3')
+        self.test_mitigations = [self.test_mitigation1, self.test_mitigation2, self.test_mitigation3]
+        self.test_impact1 = Impact(self.test_mitigation2, 0)
 
-        self.childData1 = Datum('Child Data 1')
-        self.childData2 = Datum('Child Data 2')
-        self.parentData = Datum('Parent Data 1')
-        self.parentData.addChild(self.childData1)
-        self.parentData.addChild(self.childData2)
+        self.child_data1 = Datum('Child Data 1')
+        self.child_data2 = Datum('Child Data 2')
+        self.parent_data = Datum('Parent Data')
+        self.parent_data.add_child(self.child_data1)
+        self.parent_data.add_child(self.child_data2)
 
-        self.childGoal1 = Goal('Child Goal 1')
-        self.childGoal2 = Goal('Child Goal 2')
-        self.parentGoal = Goal('Parent Goal 1')
-        self.parentGoal.addChild(self.childGoal1)
-        self.parentGoal.addChild(self.childGoal2)
+        self.child_goal1 = Goal('Child Goal 1')
+        self.child_goal2 = Goal('Child Goal 2')
+        self.parent_goal = Goal('Parent Goal')
+        self.parent_goal.add_child(self.child_goal1)
+        self.parent_goal.add_child(self.child_goal2)
 
-        self.childActor1 = Actor('Child Actor 1', [self.testGoal1], [self.testData1])
-        self.childActor2 = Actor('Child Actor 2', [self.testGoal2], [self.testData2])
-        self.parentActor = Actor('Parent Actor 1', [self.testGoal3], [self.testData3])
-        self.parentActor.add(childActor1)
-        self.parentActor.add(childActor2)
+        self.child_actor1 = Actor('Child Actor 1', [self.test_goal1], [self.test_data1])
+        self.child_actor2 = Actor('Child Actor 2', [self.test_goal2], [self.test_data2])
+        self.parent_actor = Actor('Parent Actor', [self.test_goal3], [self.test_data3])
+        self.parent_actor.add_child(self.child_actor1)
+        self.parent_actor.add_child(self.child_actor2)
 
-        self.testActor3 = Actor('Test Actor 3', [self.testGoal1], [self.parentData])
-        self.testActor4 = Actor('Test Actor 4', [self.parentGoal], [self.testData1])
-        self.nestedActors = {parentActor.name: parentActor, testActor3.name: testActor3, testActor4.name: testActor4}
+        self.test_actor3 = Actor('Test Actor 3', [self.test_goal1], [self.parent_data])
+        self.test_actor4 = Actor('Test Actor 4', [self.parent_goal], [self.test_data1])
+        self.nested_actors = [self.parent_actor, self.test_actor3, self.test_actor4]
 
     def test_tree(self):
-        self.assertTrue(self.testTree1.parent == None)
-        self.assertTrue(self.testTree1.children == [])
-        self.testTree1.addChild(self.testTree2)
-        self.assertTrue(self.testTree2 in self.testTree1.children)
-        self.assertTrue(self.testTree2.parent == self.testTree1)
-        self.testTree.removeChild(self.testTree2)
-        self.assertTrue(self.testTree2.parent == None)
-        self.assertTrue(self.testTree1.children == [])
+        self.assertTrue(self.test_tree1.parent == None)
+        self.assertTrue(self.test_tree1.children == [])
+        self.test_tree1.add_child(self.test_tree2)
+        self.assertTrue(self.test_tree2 in self.test_tree1.children)
+        self.assertTrue(self.test_tree2.parent == self.test_tree1)
+        self.test_tree1.remove_child(self.test_tree2)
+        self.assertTrue(self.test_tree2.parent == None)
+        self.assertTrue(self.test_tree1.children == [])
 
     def test_data(self):
-        self.assertEqual(self.testData1.name, 'Test Data 1')
-        self.assertEqual(self.testData1.description, '')
+        self.assertEqual(self.test_data1.name, 'Test Data 1')
+        self.assertEqual(self.test_data1.description, '')
 
     def test_nested_data(self):
-        self.assertTrue(self.childData1 in self.parentData.children)
-        self.assertTrue(self.childData2 in self.parentData.children)
+        self.assertTrue(self.child_data1 in self.parent_data.children)
+        self.assertTrue(self.child_data2 in self.parent_data.children)
 
     def test_goal(self):
-        self.assertEqual(self.testGoal1.name, 'Test Goal 1')
-        self.assertEqual(self.testGoal1.description, '')
+        self.assertEqual(self.test_goal1.name, 'Test Goal 1')
+        self.assertEqual(self.test_goal1.description, '')
 
     def test_nested_goals(self):
-        self.assertTrue(self.childGoal1 in self.parentGoal.children)
-        self.assertTrue(self.childGoal2 in self.parentGoal.children)
+        self.assertTrue(self.child_goal1 in self.parent_goal.children)
+        self.assertTrue(self.child_goal2 in self.parent_goal.children)
 
     def test_actor(self):
-        self.assertEqual(self.testActor1.name, 'Test Actor 1')
-        self.assertEqual(len(self.testActor1.goals), 2)
-        self.assertEqual(self.testActor1.goals[0].name, 'Test Goal 1')
-        self.assertEqual(len(self.testActor1.data), 2)
-        self.assertEqual(self.testActor1.data[1].name, 'Test Data 2')
-        self.assertEqual(self.testActors['Test Actor 1'].goals[0].name, 'Test Goal 1')
+        self.assertEqual(self.test_actor1.name, 'Test Actor 1')
+        self.assertEqual(len(self.test_actor1.goals), 2)
+        self.assertEqual(self.test_actor1.goals[0].name, 'Test Goal 1')
+        self.assertEqual(len(self.test_actor1.data), 2)
+        self.assertEqual(self.test_actor1.data[1].name, 'Test Data 2')
+        self.assertEqual(self.test_actors[0].goals[0].name, 'Test Goal 1')
 
     def test_nested_actors(self):
-        self.assertTrue(self.childActor1 in self.parentActor.children)
-        self.assertTrue(self.childActor2 in self.parentActor.children)
-        self.assertTrue(self.testGoal3 in self.childActor1.goals)
-        self.assertTrue(self.testData3 in self.childActor2.data)
-        self.assertFalse(self.testGoal2 in self.parentActor.goals)
-        self.assertFalse(self.testdata2 in self.parentActor.data)
+        self.assertTrue(self.child_actor1 in self.parent_actor.children)
+        self.assertTrue(self.child_actor2 in self.parent_actor.children)
+        self.assertTrue(self.test_goal3 in self.child_actor1.goals)
+        self.assertTrue(self.test_data3 in self.child_actor2.data)
+        self.assertFalse(self.test_goal2 in self.parent_actor.goals)
+        self.assertFalse(self.test_data2 in self.parent_actor.data)
 
     def test_actors_with_nested_data(self):
-        self.assertTrue(self.childData1 in self.testActor.data)
-        self.assertTrue(self.childData2 in self.testActor.data)
-        self.assertTrue(self.parentData in self.testActor.data)        
+        self.assertTrue(self.child_data1 in self.test_actor3.data[0].children)
+        self.assertTrue(self.child_data2 in self.test_actor3.data[0].children)
+        self.assertTrue(self.parent_data in self.test_actor3.data)        
 
     def test_actors_with_nested_goals(self):
-        self.assertTrue(self.childGoal1 in self.testActor.goal)
-        self.assertTrue(self.childGoal2 in self.testActor.goal)
-        self.assertTrue(self.parentGoal in self.testActor.goal)
+        self.assertTrue(self.child_goal1 in self.test_actor4.goals[0].children)
+        self.assertTrue(self.child_goal2 in self.test_actor4.goals[0].children)
+        self.assertTrue(self.parent_goal in self.test_actor4.goals)
+
+    def test_get_all_actors(self):
+        self.assertEqual(len(get_all_actors(self.nested_actors)), 5)
 
     def test_disclosure(self):
-        self.assertEqual(self.testDisclosure1.fromActor.name, 'Test Actor 1')
-        self.assertEqual(self.testDisclosure2.purpose, 'Purpose 2')
-        self.assertEqual(self.testDisclosures[1].toActor.name, 'Test Actor 1')
+        self.assertEqual(self.test_disclosure1.from_actor.name, 'Test Actor 1')
+        self.assertEqual(self.test_disclosure2.purpose, 'Purpose 2')
+        self.assertEqual(self.test_disclosures[1].to_actor.name, 'Test Actor 1')
 
     def test_possible_disclosures(self):
-        possibleDisclosures = getPossibleDisclosures(self.testActors)
-        self.assertEqual(len(possibleDisclosures), 4)
-        foundOne, foundTwo, foundThree, foundFour = False, False, False, False
-        for d in possibleDisclosures:
-            if d.fromActor.name == 'Test Actor 1' and d.toActor.name == 'Test Actor 2':
+        possible_disclosures = get_possible_disclosures(self.test_actors)
+        self.assertEqual(len(possible_disclosures), 4)
+        found_one, found_two, found_three, found_four = False, False, False, False
+        for d in possible_disclosures:
+            if d.from_actor.name == 'Test Actor 1' and d.to_actor.name == 'Test Actor 2':
                 if d.data.name == 'Test Data 1':
-                    foundOne = True
+                    found_one = True
                 elif d.data.name == 'Test Data 2':
-                    foundTwo = True
-            elif d.fromActor.name == 'Test Actor 2' and d.toActor.name == 'Test Actor 1':
+                    found_two = True
+            elif d.from_actor.name == 'Test Actor 2' and d.to_actor.name == 'Test Actor 1':
                 if d.data.name == 'Test Data 3':
-                    foundThree = True
+                    found_three = True
                 elif d.data.name == 'Test Data 4':
-                    foundFour = True
-        self.assertTrue(foundOne and foundTwo and foundThree and foundFour)
-        self.testActors['Test Actor 3'] = Actor('Test Actor 3', [Goal('Test Goal 5')], [Datum('Test Data 6'), Datum('Test Data 7'), Datum('Test Data 8')])
-        possibleDisclosures = getPossibleDisclosures(self.testActors)
-        self.assertEqual(len(possibleDisclosures), 14)
+                    found_four = True
+        self.assertTrue(found_one and found_two and found_three and found_four)
+        self.test_actors.append(Actor('Test Actor 3', [Goal('Test Goal 5')], [Datum('Test Data 6'), Datum('Test Data 7'), Datum('Test Data 8')]))
+        possible_disclosures = get_possible_disclosures(self.test_actors)
+        self.assertEqual(len(possible_disclosures), 14)
 
     def test_nested_disclosures(self):
-        possibleDisclsoures = getPossibleDisclosures(self.nestedActors)
-        self.assertEqual(len(possibleDisclosures), 28)
-        foundOne = False
-        for d in possibleDisclsosures:
-            if d.fromActor.name == 'Child Actor 1':
-                if d.toActor.name == 'Test Actor 3':
+        possible_disclosures = get_possible_disclosures(self.nested_actors)
+        self.assertEqual(len(possible_disclosures), 28)
+        found_one = False
+        for d in possible_disclosures:
+            if d.from_actor.name == 'Child Actor 1':
+                if d.to_actor.name == 'Test Actor 3':
                     if d.data.name == 'Test Data 3':
-                        foundOne = True
-        self.assertTrue(foundOne)
+                        found_one = True
+        self.assertTrue(found_one)
 
     def test_top_level_disclosures(self):
-        topLevelDisclsoures = getTopLevelDisclosures(self.nestedActors)
-        self.assertEqual(len(topLevelDisclosures), 6)
-        foundOne = False
-        for d in topLevelDisclsosures:
-            if d.fromActor.name == 'Parent Actor':
-                if d.toActor.name == 'Test Actor 3':
+        top_level_disclosures = get_top_level_disclosures(self.nested_actors)
+        self.assertEqual(len(top_level_disclosures), 6)
+        found_one = False
+        for d in top_level_disclosures:
+            if d.from_actor.name == 'Parent Actor':
+                if d.to_actor.name == 'Test Actor 3':
                     if d.data.name == 'Test Data 3':
-                        foundOne = True
-        self.assertTrue(foundOne)
+                        found_one = True
+        self.assertTrue(found_one)
 
     def test_mitigation(self):
-        self.assertEqual(self.testMitigation1.disclosure.fromActor.name, 'Test Actor 2')
-        self.assertEqual(self.testMitigation1.category, 'Anonymity')
-        self.assertEqual(self.testMitigation1.description, 'Test Mitigation Description 1')
-        self.assertEqual(self.testMitigations[2].category, 'Notice')
+        self.assertEqual(self.test_mitigation1.disclosure.from_actor.name, 'Test Actor 2')
+        self.assertEqual(self.test_mitigation1.category, 'Anonymity')
+        self.assertEqual(self.test_mitigation1.description, 'Test Mitigation Description 1')
+        self.assertEqual(self.test_mitigations[2].category, 'Notice')
 
     def test_possible_mitigations(self):
-        possibleMitigations = getPossibleMitigations(getPossibleDisclosures(self.testActors))
-        self.assertEqual(len(possibleMitigations), 4 * len(mitigation_categories))
+        possible_mitigations = get_possible_mitigations(get_possible_disclosures(self.test_actors))
+        self.assertEqual(len(possible_mitigations), 4 * len(mitigation_categories))
 
     def test_impact(self):
-        self.assertEqual(self.testImpact1.mitigation.category, 'Limit Audience')
-        self.assertEqual(self.testImpact1.actor.name, 'Test Actor 2')
-        self.assertEqual(self.testImpact1.goal.name, 'Test Goal 3')
+        self.assertEqual(self.test_impact1.mitigation.category, 'Limit Audience')
+        self.assertEqual(self.test_impact1.actor.name, 'Test Actor 2')
+        self.assertEqual(self.test_impact1.goal.name, 'Test Goal 3')
 
     def test_possible_goals(self):
-        possibleImpacts = getPossibleImpacts(getPossibleMitigations(getPossibleDisclosures(self.testActors)))
-        self.assertEqual(len(possibleImpacts), 4 * len(mitigation_categories) * 4)
+        possible_impacts = get_possible_impacts(get_possible_mitigations(get_possible_disclosures(self.test_actors)))
+        self.assertEqual(len(possible_impacts), 4 * len(mitigation_categories) * 4)
 
     def p2pu(self):
         users = Actor('Learners', ['Learn about subjects using peer contributions', 'Contribute to others’ learning by asking helpful questions and providing feedback', 'Avoid revealing embarrassing or otherwise harmful information online'], ['Display Name', 'Username', 'First & last name', 'Email address', 'Password', 'Location', 'Bio', 'Profile image', 'Links', 'RSS feeds from links', 'Followers', 'Follower count', 'Following', 'Following count', 'Enrolled courses',  'Private messages', 'Clickstream/activity'])
@@ -188,7 +185,7 @@ class unittests(unittest.TestCase):
         isp = Actor('Internet service providers', ['Offer reliable, affordable service', 'Abide by local laws and regulations'], [])
         govt = Actor('Governments', ['Ensure safety and security'], [])
         actors = {users.name: users, developers.name: developers, isp.name: isp}
-        for disclosure in getPossibleDisclosures(actors):
+        for disclosure in get_possible_disclosures(actors):
             print disclosure
 
 if __name__ == '__main__':
