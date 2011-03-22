@@ -83,8 +83,10 @@ class Disclosure:
         self.purpose = purpose
         self.flagged = flagged
     def __str__(self):
-        return "disclosure of %s from %s to %s for %s" % (self.data, self.from_actor, self.to_actor, self.purpose)
-    
+        if (self.purpose == ''):
+            return "disclosure of %s from %s to %s" % (self.data, self.from_actor, self.to_actor)            
+        else:
+            return "disclosure of %s from %s to %s for %s" % (self.data, self.from_actor, self.to_actor, self.purpose)
 class Mitigation:
     def __init__(self, disclosure, category, description = '', flagged = False):
         self.disclosure = disclosure
@@ -141,6 +143,16 @@ def get_top_level_disclosures(actors):
                         disclosures.append(Disclosure(to_actor, data, from_actor))
     return disclosures
 
+def trim_disclosures(disclosures, possible_disclosures):
+    new_disclosures = []
+    for disclosure in disclosures:
+        for possible_disclosure in possible_disclosures:
+            if possible_disclosure.from_actor.name == disclosure.from_actor:
+                if possible_disclosure.data.name == disclosure.data:
+                    if possible_disclosure.to_actor.name == disclosure.to_actor:
+                        new_disclosures.append(disclosure)
+    return new_disclosures
+    
 def get_possible_mitigations(disclosures):
     mitigations = []
     for disclosure in disclosures:

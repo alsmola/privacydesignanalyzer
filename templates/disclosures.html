@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+    function modifyDisclosureResult(data) {
+        if (data.indexOf('Error') == -1) {
+
+        } else {
+            $('.error').html(data);   
+        }
+    }
+    
+    $(document).ready(function () {
+        $('#disclosures').addClass('selected');
+        $('.flagged').live('change', function () {
+            var flag = $(this).attr('checked');
+            var cells = $(this).parent().siblings('td');
+            var fromActor = $(cells[0]).text();
+            var data = $(cells[1]).text();
+            var toActor = $(cells[2]).text();
+            $.post('/disclosure', 
+                {from_actor: fromActor, data: data, to_actor: toActor, flag: flag},
+                function(data) {
+                    modifyDisclosureResult(data);
+                }
+            ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        })
+    });
+    </script>
+
+    <table id="disclosures-table">
+        <tr><th>Flagged</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
+    {% for from_actor in actors %}
+        {% for datum in from_actor.data %}
+            {% for to_actor in actors %}
+                {% if from_actor.name != to_actor.name %}
+                <tr>
+                    <td><input type="checkbox" class="flagged" {{checked(from_actor, datum, to_actor)}} ></td>
+                    <td>{{from_actor}}</td>
+                    <td>{{datum}}</td>
+                    <td>{{to_actor}}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    {% endfor %}
+    </table>
+{% endblock %}
+
+{% macro checked(from_actor, data, to_actor) %}
+    {% for d in disclosures %}
+
+        
+        {% if d.from_actor == from_actor.name and d.data == data.name and d.to_actor == to_actor.name %}
+            checked = "true"
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

@@ -140,5 +140,5 @@ $(document).ready(function () {
                 editResult(data, name);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
-    });    
+    });
 });

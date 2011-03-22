@@ -155,6 +155,24 @@ class unittests(unittest.TestCase):
                         found_one = True
         self.assertTrue(found_one)
 
+    def test_trim_disclosures(self):
+        self.test_data5 = Datum('Test Data 5')
+        self.test_actor5 = Actor('Test Actor 5', [Goal('Test Goal 5')], [self.test_data5])
+        self.test_actor6 = Actor('Test Actor 6', [Goal('Test Goal 6')], [Datum('Test Data 6')])
+        self.test_actors.append(self.test_actor5)
+        self.test_actors.append(self.test_actor6)
+        disclosures = []
+        disclosures.append(Disclosure(self.test_actor1, self.test_data1, self.test_actor2))
+        disclosures.append(Disclosure(self.test_actor2, self.test_data3, self.test_actor5))
+        disclosures.append(Disclosure(self.test_actor5, self.test_data5, self.test_actor6))
+        self.test_actors.remove(self.test_actor2)
+        possible_disclosures = get_possible_disclosures(self.test_actors)
+        trimmed_disclosures = trim_disclosures(disclosures, possible_disclosures)
+        self.assertEqual(len(trimmed_disclosures), 1)
+        self.assertEqual(trimmed_disclosures[0].from_actor, self.test_actor5)
+        self.assertEqual(trimmed_disclosures[0].to_actor, self.test_actor6)
+
+
     def test_mitigation(self):
         self.assertEqual(self.test_mitigation1.disclosure.from_actor.name, 'Test Actor 2')
         self.assertEqual(self.test_mitigation1.category, 'Anonymity')
@@ -174,7 +192,7 @@ class unittests(unittest.TestCase):
         possible_impacts = get_possible_impacts(get_possible_mitigations(get_possible_disclosures(self.test_actors)))
         self.assertEqual(len(possible_impacts), 4 * len(mitigation_categories) * 4)
 
-    def test_p2pu(self):
+    def t_p2pu(self):
         users = Actor('Learners', ['Learn about subjects using peer contributions', 'Contribute to others’ learning by asking helpful questions and providing feedback', 'Avoid revealing embarrassing or otherwise harmful information online'], ['Display Name', 'Username', 'First & last name', 'Email address', 'Password', 'Location', 'Bio', 'Profile image', 'Links', 'RSS feeds from links', 'Followers', 'Follower count', 'Following', 'Following count', 'Enrolled courses',  'Private messages', 'Clickstream/activity'])
         facilitators = Actor('Facilitators', ['Organize courses that are compelling and informative', 'Encourage feedback and student participation', 'Avoid revealing embarrassing or otherwise harmful information online'], [])
         organizers = Actor('Organizers', ['Create an open environment for learning', 'Bring high-quality learning material to as many people who want it as possible', 'Respect users by recognizing and appropriately treating sensitive information'], [])

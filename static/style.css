@@ -130,3 +130,18 @@ overflow: hidden;
 margin: 10px 0;    
 }
 
+#disclosures-table {
+border: 1px solid #888;
+text-align: center;
+
+}
+
+#disclosures-table td {
+border: 1px solid #888; 
+padding: 5px;
+}
+
+#disclosures-table th {
+background-color: green;
+padding: 5px;    
+}

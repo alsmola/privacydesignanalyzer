@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#data').addClass('selected');
+    });
+    </script>
+    
+    {% for actor in actors %}
+    <div class="question">
+        <p>What are the pieces of data for <span class="actor-name">{{ actor.name }}</span>?</p>    
+        <div class="response">
+            <input type="hidden" class="item-type-and-parent-name" value="datum,{{actor}}"/>
+            <ul id="{{actor}}" class="list">
+                <script type="text/javascript">
+                {% for datum in actor.data %}
+                    $("#{{ actor }}").append(getItemHtml("{{ datum.name }}"));
+                {% endfor %}
+                </script>
+            </ul>
+            <form class="add-form">
+              <input class="add-name">
+              <a class="add" href="#">Add</a>
+            </form>
+            <p class="error"></p>
+        </div>
+    </div>
+    {% endfor %}
+    <div id="nav">
+        <a class="prev" href="/actors">&lt; Prev (Goals)</a>
+        <a class="next" href="/datas">Next (Disclosures) &gt;</a>
+    </div>
+</div>
+{% endblock %}
