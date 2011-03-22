@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $('#goals').addClass('selected');
+    });
+    </script>
+    
+    {% for actor in actors %}
+    <div class="question">
+        <p>What are the goals for <span class="actor-name">{{ actor.name }}</span>?</p>    
+        <div class="response">
+            <input type="hidden" class="item-type-and-parent-name" value="goal,{{actor}}"/>
+            <ul id="{{actor}}" class="list">
+                <script type="text/javascript">
+                {% for goal in actor.goals %}
+                    $("#{{ actor }}").append(getItemHtml("{{ goal.name }}"));
+                {% endfor %}
+                </script>
+            </ul>
+            <form class="add-form">
+              <input class="add-name">
+              <a class="add" href="#">Add</a>
+            </form>
+            <p class="error"></p>
+        </div>
+    </div>
+    {% endfor %}
+    <div id="nav">
+        <a class="prev" href="/actors">&lt; Prev (Actors)</a>
+        <a class="next" href="/goals">Next (Data) &gt;</a>
+    </div>
+</div>
+{% endblock %}

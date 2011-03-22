@@ -43,7 +43,7 @@ class Goal(Tree):
         return self.name
 
 class Actor(Tree):
-    def __init__(self, name, goals, data):
+    def __init__(self, name, goals = [], data = []):
         Tree.__init__(self)
         self.name = name
         self._goals = goals
@@ -159,4 +159,3 @@ def get_possible_impacts(mitigations):
             impacts.append(Impact(mitigation, goalIndex))
             goalIndex = goalIndex + 1
     return impacts
-

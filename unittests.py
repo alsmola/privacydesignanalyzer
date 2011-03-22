@@ -174,7 +174,7 @@ class unittests(unittest.TestCase):
         possible_impacts = get_possible_impacts(get_possible_mitigations(get_possible_disclosures(self.test_actors)))
         self.assertEqual(len(possible_impacts), 4 * len(mitigation_categories) * 4)
 
-    def p2pu(self):
+    def test_p2pu(self):
         users = Actor('Learners', ['Learn about subjects using peer contributions', 'Contribute to others’ learning by asking helpful questions and providing feedback', 'Avoid revealing embarrassing or otherwise harmful information online'], ['Display Name', 'Username', 'First & last name', 'Email address', 'Password', 'Location', 'Bio', 'Profile image', 'Links', 'RSS feeds from links', 'Followers', 'Follower count', 'Following', 'Following count', 'Enrolled courses',  'Private messages', 'Clickstream/activity'])
         facilitators = Actor('Facilitators', ['Organize courses that are compelling and informative', 'Encourage feedback and student participation', 'Avoid revealing embarrassing or otherwise harmful information online'], [])
         organizers = Actor('Organizers', ['Create an open environment for learning', 'Bring high-quality learning material to as many people who want it as possible', 'Respect users by recognizing and appropriately treating sensitive information'], [])
@@ -184,7 +184,7 @@ class unittests(unittest.TestCase):
         unregisteredUser = Actor('Unregistered users', ['Benefit from courses without directly participating'], [])
         isp = Actor('Internet service providers', ['Offer reliable, affordable service', 'Abide by local laws and regulations'], [])
         govt = Actor('Governments', ['Ensure safety and security'], [])
-        actors = {users.name: users, developers.name: developers, isp.name: isp}
+        actors = [users, developers, isp]
         for disclosure in get_possible_disclosures(actors):
             print disclosure
 

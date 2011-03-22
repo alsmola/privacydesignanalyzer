@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Privacy Analysis</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+    <body>
+    <div id="title">Privacy Design Analysis</div>
+    <ul id="sidebar">
+            <li id="actors"><a href="/actors">Actors</a></li>
+            <li id="goals"><a href="/goals">Goals</a></li>
+            <li id="data"><a href="/data">Data</a></li>
+            <li id="disclosures"><a href="/disclosures">Disclosures</a></li>
+            <li id="mitigations"><a href="/mitigations">Mitigations</a></li>
+            <li id="impacts"><a href="/impacts">Impacts</a></li>
+            <li id="results"><a href="/results">Result</a></li>
+    </ul>
+    <div id="content">
+        {% block body %}{% endblock %}
+    </div>
+    </body>
+
+</html>

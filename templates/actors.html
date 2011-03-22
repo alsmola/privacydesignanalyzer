@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#actors').addClass('selected');
+        });
+    </script>
+    <div class="question">
+        <p>Who are the users of the application?</p>
+        <div class="response">
+            <input type="hidden" class="item-type-and-parent-name" value="actor,">
+            <ul class="list">
+                <script type="text/javascript">
+                {% for actor in actors %}
+                    $('.list').append(getItemHtml("{{ actor.name }}"));
+                {% endfor %}
+                </script>
+            </ul>
+            <form class="add-form">
+                <input class="add-name">
+                <a class="add" href="#">Add</a>
+            </form>
+            <p class="error"></p>
+        </div>
+    </div>    
+    <div id="nav">
+        <a class="prev" href="/">&lt; Prev (Welcome)</a>
+        <a class="next" href="/goals">Next (Goals) &gt;</a>
+    </div>
+{% endblock %}
