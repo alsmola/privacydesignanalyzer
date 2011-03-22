@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+    function modifyMitigationResult(data) {
+        if (data.indexOf('Error') == -1) {
+
+        } else {
+            $('.error').html(data);   
+        }
+    }
+    
+    $(document).ready(function () {
+        $('#mitigations').addClass('selected');
+        $('.mitigation input').live('change', function () {
+            var flag = $(this).attr('checked');
+            var category = $(this).siblings().text();
+            var cells = $(this).parent().parent().siblings('td');
+            var fromActor = $(cells[0]).text();
+            var data = $(cells[1]).text();
+            var toActor = $(cells[2]).text();
+            $.post('/mitigation', 
+                {from_actor: fromActor, data: data, to_actor: toActor, category: category, flag: flag},
+                function(data) {
+                    modifyMitigationResult(data);
+                }
+            ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        })
+    });
+    </script>
+
+    <table id="mitigations-table">
+        <tr><th>Mitigation</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
+        {% for disclosure in disclosures %}
+            <tr>
+                <td>
+
+                    {% for category in categories %}
+                    <div class="mitigation">
+                    <input type="checkbox" {{checked(disclosure.from_actor, disclosure.data, disclosure.to_actor, category)}}><span>{{category}}</span>
+                    </div>
+                    {% endfor %}
+                </td>
+                <td>{{disclosure.from_actor}}</td>
+                <td>{{disclosure.data}}</td>
+                <td>{{disclosure.to_actor}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% macro checked(from_actor, data, to_actor, category) %}
+    {% for m in mitigations %}
+        {% if m.disclosure.from_actor == from_actor and m.disclosure.data == data and m.disclosure.to_actor == to_actor and m.category == category %}
+            checked = "true"
+        {% endif %}
+    {% endfor %}
+{% endmacro %}

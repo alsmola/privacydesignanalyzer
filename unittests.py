@@ -183,6 +183,29 @@ class unittests(unittest.TestCase):
         possible_mitigations = get_possible_mitigations(get_possible_disclosures(self.test_actors))
         self.assertEqual(len(possible_mitigations), 4 * len(mitigation_categories))
 
+    def test_trim_mitigations(self):
+        self.test_data5 = Datum('Test Data 5')
+        self.test_actor5 = Actor('Test Actor 5', [Goal('Test Goal 5')], [self.test_data5])
+        self.test_actor6 = Actor('Test Actor 6', [Goal('Test Goal 6')], [Datum('Test Data 6')])
+        self.test_actors.append(self.test_actor5)
+        self.test_actors.append(self.test_actor6)
+
+        self.test_disclosure1 = Disclosure(self.test_actor1, self.test_data1, self.test_actor2)
+        self.test_disclosure2 = Disclosure(self.test_actor2, self.test_data3, self.test_actor5)
+        self.test_disclosure3 = Disclosure(self.test_actor5, self.test_data5, self.test_actor6)
+        disclosures = [test_disclosure1, test_disclosure2, test_disclosure3]
+        self.test_mitigation1 = Mitigation(self.test_disclosure1, 'Limitation of Audience')
+        self.test_mitigation2 = Mitigation(self.test_disclosure3, 'Anonymity')
+        mitigations = [test_mitigation1, test_mitigation2]
+        
+        self.test_actors.remove(self.test_actor2)
+        possible_disclosures = get_possible_disclosures(self.test_actors)
+        trimmed_disclosures = trim_disclosures(disclosures, possible_disclosures)
+        trimmed_mitigations = trim_mitigations(mitigations, trimmed_disclosures)
+        self.assertEqual(len(trimmed_disclosures), 1)
+        self.assertEqual(trimmed_disclosures[0].disclosure, self.test_disclosure3)
+       self.assertEqual(trimmed_disclosures[0].category, 'Anonymity')
+        
     def test_impact(self):
         self.assertEqual(self.test_impact1.mitigation.category, 'Limit Audience')
         self.assertEqual(self.test_impact1.actor.name, 'Test Actor 2')

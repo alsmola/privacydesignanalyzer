@@ -160,6 +160,16 @@ def get_possible_mitigations(disclosures):
             mitigations.append(Mitigation(disclosure, category))
     return mitigations
 
+def trim_mitigations(mitigations, trimmed_disclosures):
+    new_mitigations = []
+    for mitigation in mitigations:
+        for disclosure in trimmed_disclosures:
+            if disclosure.from_actor == mitigation.disclosure.from_actor:
+                if disclosure.data == mitigation.disclosure.data:
+                    if disclosure.to_actor == mitigation.disclosure.to_actor:
+                        new_mitigations.append(mitigation)
+    return new_mitigations
+
 def get_possible_impacts(mitigations):
     impacts = []
     for mitigation in mitigations:

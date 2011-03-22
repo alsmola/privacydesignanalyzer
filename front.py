@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session
 import main
-from main import Actor, Goal, Datum, Disclosure
+from main import Actor, Goal, Datum, Disclosure, Mitigation, Impact
 app = Flask(__name__)
 
 @app.route("/")
@@ -154,7 +154,52 @@ def disclosure():
         session.modified = True
         return "Unflagged %s, %s, %s" % (from_actor, data, to_actor)
 
+@app.route("/mitigations")
+def mitigations():
+    if (session['mitigations'] == None):
+        session['mitigations'] = []
+        
+    possible_disclosures = main.get_possible_disclosures(session['actors'])
+    disclosures = main.trim_disclosures(session['disclosures'], possible_disclosures)
+    session['disclosures'] = disclosures
+    mitigations = main.trim_mitigations(session['mitigations'], disclosures)    
+    session['mitigations'] = mitigations
+    session.modified = True
+    return render_template('mitigations.html', disclosures = disclosures, mitigations = mitigations, categories = main.mitigation_categories)
 
+@app.route("/mitigation", methods=['POST',])
+def mitigation():
+    to_actor = request.form['to_actor']
+    data = request.form['data']
+    from_actor = request.form['from_actor']
+    category = request.form['category']
+    flag = request.form['flag']
+    disclosures = session['disclosures']
+    mitigations = session['mitigations']
+    disclosureToModify = None
+    for d in disclosures:
+        print "%s, %s" % (d.to_actor, to_actor)
+        if d.to_actor == to_actor and d.data == data and d.from_actor == from_actor:
+            disclosureToModify = d
+    if (disclosureToModify == None):
+        return 'Error: disclosure "%s" not flagged.' % {d}
+    if (flag == 'true'):
+        for m in mitigations:
+            if (m.disclosure == disclosureToModify and m.category == category):
+                return 'Error: mitigation "%s" already flagged.' % (m)
+        mitigations.append(Mitigation(disclosureToModify, category))
+        session.modified = True
+        return "Flagged %s, %s" % (disclosureToModify, category)
+    else:
+        mitigationToRemove = None
+        for m in mitigations:
+            if m.disclosure.from_actor == disclosureToModify.from_actor and m.disclosure.data == disclosureToModify.data and m.disclosure.to_actor == disclosureToModify.to_actor and m.category == category:
+                mitigationToRemove = m
+        if mitigationToRemove == None:
+            return 'Error: mitigation "%s" not flagged.' % (mitigationToRemove)
+        mitigations.remove(mitigationToRemove)
+        session.modified = True
+        return "Unflagged %s, %s" % (disclosureToModify, category)
       
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RS'
 
