@@ -178,7 +178,6 @@ def mitigation():
     mitigations = session['mitigations']
     disclosureToModify = None
     for d in disclosures:
-        print "%s, %s" % (d.to_actor, to_actor)
         if d.to_actor == to_actor and d.data == data and d.from_actor == from_actor:
             disclosureToModify = d
     if (disclosureToModify == None):
@@ -200,6 +199,50 @@ def mitigation():
         mitigations.remove(mitigationToRemove)
         session.modified = True
         return "Unflagged %s, %s" % (disclosureToModify, category)
+        
+@app.route("/impacts")
+def impacts():
+    possible_disclosures = main.get_possible_disclosures(session['actors'])
+    disclosures = main.trim_disclosures(session['disclosures'], possible_disclosures)
+    session['disclosures'] = disclosures
+    mitigations = main.trim_mitigations(session['mitigations'], disclosures)    
+    session['mitigations'] = mitigations    
+    session.modified = True
+    impacts = []
+    return render_template('impacts.html', impacts = impacts, mitigations = mitigations, actors = session['actors'])
+
+@app.route("/impact", methods=['POST',])
+def mitigation():
+    value = request.form['value']
+    actor = request.form['actor']
+    goal = request.form['goal']    
+    to_actor = request.form['to_actor']
+    data = request.form['data']
+    from_actor = request.form['from_actor']
+    category = request.form['category']
+
+    mitigations = session['mitigations']
+    impacts = session['impacts']
+    
+    mitigationToModify = None
+    for m in mitigation:
+        if m.to_actor == to_actor and m.data == data and m.from_actor == from_actor and m.category == category:
+            mitigationToModify = m
+    if (mitigationToModify == None):
+        return 'Error: mitigation "%s" does not exist.' % {m}
+    impactToModify = None
+    for i in impacts:
+        if (i.mitigation == mitigationToModify and i.goal = goal and i.actor = actor):
+            impactToModify = i
+    if impactToModify == None:
+        impactToModify = Impact(value, actor, goal, mitigationToModify)
+        impacts.append(impactToModify)
+    else:
+        impactToModify.value == value
+
+    session.modified = True
+    return "Modified %s, %s" % (impactToModify, value)
+
       
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RS'
 

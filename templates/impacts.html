@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script type="text/javascript">
+    function modifyImpactResult(data) {
+        if (data.indexOf('Error') == -1) {
+
+        } else {
+            $('.error').html(data);   
+        }
+    }
+    
+    $(document).ready(function () {
+        $('#impacts').addClass('selected');
+        
+        $('.impact').live('change', function () {
+            var value = $(this).val();
+            var cells = $(this).parent().siblings('td');
+            var actor = $(cells[0]).text();
+            var goal = $(cells[1]).text(); 
+            var d_cells = $(this).parents('impact-row').siblings('td');
+            var category = $(d_cells[0]).text();
+            var from_actor = $(d_cells[1]).text();
+            var data = $(d_cells[2]).text();
+            var to_actor = $(d_cells[3]).text();
+            
+            $.post('/impact', 
+                {value: value, actor: actor, goal: goal, from_actor: fromActor, data: data, to_actor: toActor, category: category},
+                function(data) {
+                    modifyImpactResult(data);
+                }
+            ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        });
+*/
+    });
+    </script>
+
+    <table id="impacts-table">
+        <tr><th>Impact</th><th>Category</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
+        {% for mitigation in mitigations %}
+            <tr>
+                <td class="impact-row">
+                    <table>
+                        <th>Actor</th><th>Goal</th><th>Support/Neutral/Harm</th>
+                        {% for actor in actors %}
+                            {% for goal in actor.goals %}
+                            <tr>
+                                <td>{{actor.name}}</td>
+                                <td>{{goal.name}}</td>
+                                <td>
+                                    <select class="impact">
+                                        <option value="support">Support</option>
+                                        <option value="neutral" selected="true">Neutral</option>
+                                        <option value="harm">Harm</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </table>
+                </td>
+                <td>{{mitigation.category}}</td>
+                <td>{{mitigation.disclosure.from_actor}}</td>
+                <td>{{mitigation.disclosure.data}}</td>
+                <td>{{mitigation.disclosure.to_actor}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+
+{% macro checked() %}
+
+{% endmacro %}
