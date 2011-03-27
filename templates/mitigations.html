@@ -19,7 +19,7 @@
             var data = $(cells[1]).text();
             var toActor = $(cells[2]).text();
             $.post('/mitigation', 
-                {from_actor: fromActor, data: data, to_actor: toActor, category: category, flag: flag},
+                {from_actor_name: fromActor, data_name: data, to_actor_name: toActor, category: category, flag: flag},
                 function(data) {
                     modifyMitigationResult(data);
                 }

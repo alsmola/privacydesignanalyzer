@@ -13,8 +13,8 @@
             <input type="hidden" class="item-type-and-parent-name" value="datum,{{actor}}"/>
             <ul id="{{actor}}" class="list">
                 <script type="text/javascript">
-                {% for datum in actor.data %}
-                    $("#{{ actor }}").append(getItemHtml("{{ datum.name }}"));
+                {% for datum in actor.data.items %}
+                    $("#{{ actor }}").append(getItemHtml("{{ datum }}"));
                 {% endfor %}
                 </script>
             </ul>

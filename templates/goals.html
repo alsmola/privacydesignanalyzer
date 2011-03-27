@@ -13,8 +13,8 @@
             <input type="hidden" class="item-type-and-parent-name" value="goal,{{actor}}"/>
             <ul id="{{actor}}" class="list">
                 <script type="text/javascript">
-                {% for goal in actor.goals %}
-                    $("#{{ actor }}").append(getItemHtml("{{ goal.name }}"));
+                {% for goal in actor.goals.items %}
+                    $("#{{ actor }}").append(getItemHtml("{{ goal }}"));
                 {% endfor %}
                 </script>
             </ul>

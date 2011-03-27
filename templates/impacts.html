@@ -13,7 +13,7 @@
         $('#impacts').addClass('selected');
         
         $('.impact').live('change', function () {
-            var value = $(this).val();
+            var effect = $(this).val();
             var cells = $(this).parent().siblings('td');
             var actor = $(cells[0]).text();
             var goal = $(cells[1]).text(); 
@@ -24,7 +24,7 @@
             var to_actor = $(d_cells[3]).text();
             
             $.post('/impact', 
-                {value: value, actor: actor, goal: goal, from_actor: fromActor, data: data, to_actor: toActor, category: category},
+                {from_actor_name: fromActor, data_name: data, to_actor_name: toActor, category: category, actor_name: actor, goal: goal, effect: effect},
                 function(data) {
                     modifyImpactResult(data);
                 }
