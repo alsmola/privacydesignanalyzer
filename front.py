@@ -5,8 +5,8 @@ import main
 app = Flask(__name__)
 
 @app.route("/")
-def welcome():
-    return render_template('welcome.html')
+def start():
+    return render_template('start.html')
 
 @app.route("/actors", methods=['GET',])
 def actors():
@@ -109,7 +109,6 @@ def disclosure():
 
 @app.route("/mitigations")
 def mitigations():
-    #if (session['mitigations'] == None):
     session['mitigations'] = []        
     possible_disclosures = main.get_possible_disclosures(session['actors'])
     session['disclosures'] = main.trim_disclosures(session['disclosures'], possible_disclosures)
@@ -198,13 +197,13 @@ def p2pu():
     learners = Actor('Learners', Group([Goal('Learn about subjects from peer contributions'), Goal('Contribute to others\' learning by asking helpful questions and providing feedback'), Goal('Avoid revealing embarrassing or otherwise harmful information online')]), Group([Datum('Display Name'), Datum('Username'), Datum('First & last name'), Datum('Email address'), Datum('Password'), Datum('Location'), Datum('Bio'), Datum('Profile image'), Datum('Links'), Datum('RSS feeds from links'), Datum('Followers'), Datum('Follower count'), Datum('Following'), Datum('Following count'), Datum('Enrolled courses'), Datum('Private messages'), Datum('Clickstream activity')]))
     facilitators = Actor('Facilitators', Group([Goal('Organize courses that are compelling and informative'), Goal('Encourage feedback and student participation'), Goal('Avoid revealing embarrassing or otherwise harmful information online')]), Group([]))
     organizers = Actor('Organizers', Group([Goal('Create an open environment for learning'), Goal('Bring high-quality learning material to as many people who want it as possible'), Goal('Respect users by recognizing and appropriately treating sensitive information')]), Group([]))
-    #developers = Actor('Developers', Group([Goal('Develop systems that are functional'), Goal('Develop systems that are usable'), Goal('Develop systems that are safe')]), Group([]))
-    #research = Actor('Research community', Group([Goal('Conduct research and experiments that provide insight and guidance to academia and professional spheres'), Goal('Follow ethical guidelines')]), Group([]))
-    #search = Actor('Search engines', Group([Goal('Make all information on the web easily accessible to every web user'), Goal('Follow sites directives with regards to spidering and storing information')]), Group([]))
-    #public = Actor('Public', Group(['Benefit from courses without directly participating']), Group([]))
-    #isp = Actor('Internet service providers', Group([Goal('Offer reliable, affordable service'), Goal('Abide by local laws and regulations')]), Group([]))
-    #govt = Actor('Governments', Group([Goal('Ensure safety and security')]), Group([]))
-    session['actors'] = Group([learners, facilitators, organizers])
+    developers = Actor('Developers', Group([Goal('Develop systems that are functional'), Goal('Develop systems that are usable'), Goal('Develop systems that are safe')]), Group([]))
+    research = Actor('Research community', Group([Goal('Conduct research and experiments that provide insight and guidance to academia and professional spheres'), Goal('Follow ethical guidelines')]), Group([]))
+    search = Actor('Search engines', Group([Goal('Make all information on the web easily accessible to every web user'), Goal('Follow sites directives with regards to spidering and storing information')]), Group([]))
+    public = Actor('Public', Group(['Benefit from courses without directly participating']), Group([]))
+    isp = Actor('Internet service providers', Group([Goal('Offer reliable, affordable service'), Goal('Abide by local laws and regulations')]), Group([]))
+    govt = Actor('Governments', Group([Goal('Ensure safety and security')]), Group([]))
+    session['actors'] = Group([learners, facilitators, organizers, developers, research, search, public, isp, govt])
     session['disclosures'] = []
     session['mitigations'] = []
     session['impacts'] = []
