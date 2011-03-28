@@ -58,32 +58,43 @@ class Actor(db.Model):
 
 class Disclosure(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    app_id = db.Column(db.Integer, db.ForeignKey('application.id'))
+    
     from_actor_id = db.Column(db.Integer, db.ForeignKey('actor.id'))
+    from_actor = db.relationship('Actor', primaryjoin=(from_actor_id==Actor.id), backref=db.backref('discloses'))
+    
     to_actor_id = db.Column(db.Integer, db.ForeignKey('actor.id'))
+    to_actor = db.relationship('Actor', primaryjoin=(to_actor_id==Actor.id), backref=db.backref('disclosed'))
+    
     datum_id = db.Column(db.Integer, db.ForeignKey('datum.id'))
-    flagged = db.Column(db.Boolean)
-    def __init__(self, from_actor_id, data_id, to_actor_id, flagged = False):
+    datum = db.relationship('Datum', backref=db.backref('disclosure'))
+    
+    def __init__(self, app_id, from_actor_id, datum_id, to_actor_id, flagged = False):
+        self.app_id = app_id
         self.from_actor_id = from_actor_id
-        self.data_id = data_id
+        self.datum_id = datum_id
         self.to_actor_id = to_actor_id
         self.flagged = flagged
 
 class Mitigation(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    app_id = db.Column(db.Integer, db.ForeignKey('application.id'))
     disclosure_id = db.Column(db.Integer, db.ForeignKey('disclosure.id'))
+    disclosure = db.relationship('Disclosure', backref=db.backref('mitigation'))
     category = db.Column(db.String)
-    def __init__(self, disclosure_id, category, flagged = False):
+    def __init__(self, app_id, disclosure_id, category):
+        self.app_id = app_id
         self.disclosure_id = disclosure_id
         self.category = category
-        self.description = description
-        self.flagged = flagged
 
 class Impact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    mitigation_id = db.Column(db.Integer, db.ForeignKey('disclosure.id'))
+    app_id = db.Column(db.Integer, db.ForeignKey('application.id'))
+    mitigation_id = db.Column(db.Integer, db.ForeignKey('disclosure.id'))    
     goal_id = db.Column(db.Integer, db.ForeignKey('goal.id'))
     effect = db.Column(db.String)
-    def __init__(self, mitigation_id, goal_id, effect):
+    def __init__(self, app_id, mitigation_id, goal_id, effect):
+        self.app_id = app_id
         self.mitigation_id = mitigation_id
         self.goal_id = goal_id
         self.effect = effect

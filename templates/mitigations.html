@@ -1,25 +1,23 @@
 {% extends "layout.html" %}
 {% block body %}
     <script type="text/javascript">
-    function modifyMitigationResult(data) {
-        if (data.indexOf('Error') == -1) {
+    function modifyMitigationResult(result) {
+        if (result['success']) {
 
         } else {
-            $('.error').html(data);   
+            $('.error').html(result['message']);
         }
     }
     
     $(document).ready(function () {
         $('#mitigations').addClass('selected');
         $('.mitigation input').live('change', function () {
-            var flag = $(this).attr('checked');
+            var app_id = $(this).parents('.mitigations').attr('id').split('-')[1];
+            var flagged = $(this).attr('checked');
             var category = $(this).siblings().text();
-            var cells = $(this).parent().parent().siblings('td');
-            var fromActor = $(cells[0]).text();
-            var data = $(cells[1]).text();
-            var toActor = $(cells[2]).text();
+            var disclosure_id = $(this).parents('.disclosure').attr('id').split('-')[1];
             $.post('/mitigation', 
-                {from_actor_name: fromActor, data_name: data, to_actor_name: toActor, category: category, flag: flag},
+                {app_id: app_id, disclosure_id: disclosure_id, category: category, flagged: flagged},
                 function(data) {
                     modifyMitigationResult(data);
                 }
@@ -28,29 +26,28 @@
     });
     </script>
 
-    <table id="mitigations-table">
+    <table class="mitigations" id="app-{{app_id}}">
         <tr><th>Mitigation</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
         {% for disclosure in disclosures %}
-            <tr>
+            <tr class="disclosure" id="disclosure-{{disclosure.id}}">
                 <td>
-
                     {% for category in categories %}
                     <div class="mitigation">
-                    <input type="checkbox" {{checked(disclosure.from_actor, disclosure.data, disclosure.to_actor, category)}}><span>{{category}}</span>
+                    <input type="checkbox" {{checked(disclosure.id, category)}}><span>{{category}}</span>
                     </div>
                     {% endfor %}
                 </td>
-                <td>{{disclosure.from_actor}}</td>
-                <td>{{disclosure.data}}</td>
-                <td>{{disclosure.to_actor}}</td>
+                <td>{{disclosure.from_actor.name}}</td>
+                <td>{{disclosure.datum.name}}</td>
+                <td>{{disclosure.to_actor.name}}</td>
             </tr>
         {% endfor %}
     </table>
 {% endblock %}
 
-{% macro checked(from_actor, data, to_actor, category) %}
+{% macro checked(disclosure_id, category) %}
     {% for m in mitigations %}
-        {% if m.disclosure.from_actor == from_actor and m.disclosure.data == data and m.disclosure.to_actor == to_actor and m.category == category %}
+        {% if m.disclosure_id == disclosure_id and m.category == category %}
             checked = "true"
         {% endif %}
     {% endfor %}

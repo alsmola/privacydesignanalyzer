@@ -1,24 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
     <script type="text/javascript">
-    function modifyDisclosureResult(data) {
-        if (data.indexOf('Error') == -1) {
+    function modifyDisclosureResult(result) {
+        if (result['success']) {
 
         } else {
-            $('.error').html(data);   
+            $('.error').html(result['message']);
         }
     }
     
     $(document).ready(function () {
         $('#disclosures').addClass('selected');
         $('.flagged').live('change', function () {
-            var flag = $(this).attr('checked');
+            var flagged = $(this).attr('checked');
+            var app_id = $(this).parents('.disclosures').attr('id').split('-')[1];
             var cells = $(this).parent().siblings('td');
-            var fromActor = $(cells[0]).text();
-            var data = $(cells[1]).text();
-            var toActor = $(cells[2]).text();
+            var fromActorId = $(cells[0]).attr('id').split('-')[1];
+            var datumId = $(cells[1]).attr('id').split('-')[1];
+            var toActorId = $(cells[2]).attr('id').split('-')[1];
             $.post('/disclosure', 
-                {from_actor_name: fromActor, data_name: data, to_actor_name: toActor, flag: flag},
+                {app_id: app_id, from_actor_id: fromActorId, datum_id: datumId, to_actor_id: toActorId, flagged: flagged},
                 function(data) {
                     modifyDisclosureResult(data);
                 }
@@ -27,17 +28,17 @@
     });
     </script>
 
-    <table id="disclosures-table">
+    <table class="disclosures" id="app-{{ app_id }}">
         <tr><th>Flagged</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
     {% for from_actor in actors %}
-        {% for datum in from_actor.data.items %}
+        {% for datum in from_actor.data %}
             {% for to_actor in actors %}
                 {% if from_actor.name != to_actor.name %}
                 <tr>
-                    <td><input type="checkbox" class="flagged" {{checked(from_actor, datum, to_actor)}} ></td>
-                    <td>{{from_actor}}</td>
-                    <td>{{datum}}</td>
-                    <td>{{to_actor}}</td>
+                    <td><input type="checkbox" class="flagged" {{checked(from_actor.id, datum.id, to_actor.id)}} ></td>
+                    <td id="fromactor-{{from_actor.id}}">{{from_actor.name}}</td>
+                    <td id="datumid-{{datum.id}}">{{datum.name}}</td>
+                    <td id="toactorid-{{to_actor.id}}">{{to_actor.name}}</td>
                 </tr>
                 {% endif %}
             {% endfor %}
@@ -46,12 +47,11 @@
     </table>
 {% endblock %}
 
-{% macro checked(from_actor, data, to_actor) %}
+{% macro checked(from_actor_id, datum_id, to_actor_id) %}
     {% for d in disclosures %}
-
-        
-        {% if d.from_actor == from_actor.name and d.data == data.name and d.to_actor == to_actor.name %}
+        {% if d.from_actor_id == from_actor_id and d.datum_id == datum_id and d.to_actor_id == to_actor_id %}
             checked = "true"
         {% endif %}
+        note="{{ d.datum_id }}|{{datum_id}}"
     {% endfor %}
 {% endmacro %}

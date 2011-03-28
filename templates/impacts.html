@@ -1,56 +1,50 @@
 {% extends "layout.html" %}
 {% block body %}
     <script type="text/javascript">
-    function modifyImpactResult(data) {
-        if (data.indexOf('Error') == -1) {
+    function modifyImpactResult(result) {
+        if (result['success']) {
 
         } else {
-            $('.error').html(data);   
+            $('.error').html(result['message']);
         }
     }
     
     $(document).ready(function () {
         $('#impacts').addClass('selected');
         
-        $('.impact').live('change', function () {
+        $('.effect').live('change', function () {
+            var app_id = $(this).parents('.impacts').attr('id').split('-')[1];
+            var mitigation_id = $(this).parents('.mitigation-row').attr('id').split('-')[1];
+            var goal_id = $(this).parent().siblings('.goal').attr('id').split('-')[1];
             var effect = $(this).val();
-            var cells = $(this).parent().siblings('td');
-            var actor = $(cells[0]).text();
-            var goal = $(cells[1]).text(); 
-            var d_cells = $(this).parents('impact-row').siblings('td');
-            var category = $(d_cells[0]).text();
-            var from_actor = $(d_cells[1]).text();
-            var data = $(d_cells[2]).text();
-            var to_actor = $(d_cells[3]).text();
             
             $.post('/impact', 
-                {from_actor_name: fromActor, data_name: data, to_actor_name: toActor, category: category, actor_name: actor, goal: goal, effect: effect},
+                {app_id:app_id, mitigation_id: mitigation_id, goal_id: goal_id, effect: effect},
                 function(data) {
                     modifyImpactResult(data);
                 }
             ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
         });
-*/
     });
     </script>
 
-    <table id="impacts-table">
+    <table class="impacts" id="app-{{app_id}}">
         <tr><th>Impact</th><th>Category</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
         {% for mitigation in mitigations %}
-            <tr>
-                <td class="impact-row">
+            <tr class="mitigation-row" id="mitigation-{{mitigation.id}}">
+                <td>
                     <table>
                         <th>Actor</th><th>Goal</th><th>Support/Neutral/Harm</th>
                         {% for actor in actors %}
                             {% for goal in actor.goals %}
                             <tr>
                                 <td>{{actor.name}}</td>
-                                <td>{{goal.name}}</td>
+                                <td class="goal" id="goal-{{goal.id}}">{{goal.name}}</td>
                                 <td>
-                                    <select class="impact">
-                                        <option value="support">Support</option>
-                                        <option value="neutral" selected="true">Neutral</option>
-                                        <option value="harm">Harm</option>
+                                    <select class="effect">
+                                        <option value="support"{{selected(mitigation.id, 'support')}}>Support</option>
+                                        <option value="neutral" {{selected(mitigation.id, 'neutral')}}>Neutral</option>
+                                        <option value="harm"{{selected(mitigation.id, 'harm')}}>Harm</option>
                                     </select>
                                 </td>
                             </tr>
@@ -59,14 +53,21 @@
                     </table>
                 </td>
                 <td>{{mitigation.category}}</td>
-                <td>{{mitigation.disclosure.from_actor}}</td>
-                <td>{{mitigation.disclosure.data}}</td>
-                <td>{{mitigation.disclosure.to_actor}}</td>
+                <td>{{mitigation.disclosure.from_actor.name}}</td>
+                <td>{{mitigation.disclosure.datum.name}}</td>
+                <td>{{mitigation.disclosure.to_actor.name}}</td>
             </tr>
         {% endfor %}
     </table>
 {% endblock %}
 
-{% macro checked() %}
-
+{% macro selected(mitigation_id, effect) %}
+    {% for i in impacts %}
+        {% if i.mitigation_id == mitigation_id and m.effect == effect %}
+            selected = "true"
+        {% endif %}
+        
+        note = "{{i.goal_id | mitigation_id}}"
+    {% endfor %}
 {% endmacro %}
+

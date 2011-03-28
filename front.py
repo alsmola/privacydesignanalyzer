@@ -95,31 +95,71 @@ def datum():
 
 @app.route("/disclosures")
 def disclosures():
-    return render_template('disclosures.html', disclosures = session['disclosures'])
+    return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/disclosure", methods=['POST',])
 def disclosure():
-    pass
+    app_id = request.form['app_id']
+    from_actor_id = request.form['from_actor_id']
+    datum_id = request.form['datum_id']
+    to_actor_id = request.form['to_actor_id']
+    flagged = request.form['flagged']
+    if flagged == 'true':
+        disclosure = Disclosure(app_id, from_actor_id, datum_id, to_actor_id)
+        db.session.add(disclosure)
+    else:
+        disclosure = Disclosure.query.filter_by(from_actor_id=from_actor_id,datum_id=datum_id,to_actor_id=to_actor_id).first()
+        db.session.delete(disclosure)
+    db.session.commit()
+    id = disclosure.id
+    return jsonify(id=id, success = True)
 
 @app.route("/mitigations")
 def mitigations():
-    return render_template('mitigations.html', disclosures = session['disclosures'], mitigations = session['mitigations'])
+    return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
 
 @app.route("/mitigation", methods=['POST',])
 def mitigation():
-    pass
+    app_id = request.form['app_id']
+    disclosure_id = request.form['disclosure_id']
+    category = request.form['category']
+    flagged = request.form['flagged']
+    if flagged == 'true':
+        mitigation = Mitigation(app_id, disclosure_id, category)
+        db.session.add(mitigation)
+    else:
+        mitigation = Mitigation.query.filter_by(disclosure_id=disclosure_id,category=category).first()
+        db.session.delete(mitigation)
+    db.session.commit()
+    id = mitigation.id
+    return jsonify(id=id, success = True)
         
 @app.route("/impacts")
 def impacts():
-
-    return render_template('impacts.html', impacts = session['impacts'], mitigations = session['mitigations'])
+    return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/impact", methods=['POST',])
 def impact():   
+    app_id = request.form['app_id']
+    mitigation_id = request.form['mitigation_id']
+    goal_id = request.form['goal_id']
+    effect = request.form['effect']
+    impact = Impact.query.filter_by(mitigation_id=mitigation_id,goal_id=goal_id).first()
+    if impact == None:
+        impact = Impact(app_id, mitigation_id, goal_id, effect)
+        db.session.add(impact)
+    else:
+        impact.effect = effect
+    db.session.commit()
+    id = impact.id
+    return jsonify(id=id, success = True)
 
-    return "Modified %s, %s" % (impactToModify, effect)
+@app.route("/reset")
+def reset():   
+    db.drop_all()
+    db.create_all()
+    return "Reset"
 
- 
 @app.route("/p2pu")
 def p2pu():
 #    learners = Actor('Learners', Group([Goal('Learn about subjects from peer contributions'), Goal('Contribute to others\' learning by asking helpful questions and providing feedback'), Goal('Avoid revealing embarrassing or otherwise harmful information online')]), Group([Datum('Display Name'), Datum('Username'), Datum('First & last name'), Datum('Email address'), Datum('Password'), Datum('Location'), Datum('Bio'), Datum('Profile image'), Datum('Links'), Datum('RSS feeds from links'), Datum('Followers'), Datum('Follower count'), Datum('Following'), Datum('Following count'), Datum('Enrolled courses'), Datum('Private messages'), Datum('Clickstream activity')]))
