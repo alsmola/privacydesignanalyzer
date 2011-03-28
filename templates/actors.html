@@ -8,16 +8,16 @@
     <div class="question">
         <p>Who are the users of the application?</p>
         <div class="response">
-            <input type="hidden" class="item-type-and-parent-name" value="actor,">
-            <ul class="list">
+            <ul class="list" id="app-{{ app_id }}">
                 <script type="text/javascript">
                 {% for actor in actors %}
-                    $('.list').append(getItemHtml("{{ actor.name }}"));
+                    $( '#app-{{ app_id }}' ).append(getItemHtml("{{ actor.name }}", "actor", "{{ actor.id }}"));
                 {% endfor %}
                 </script>
             </ul>
             <form class="add-form">
-                <input class="add-name">
+                <input class="add-name"/>
+                <input type="hidden" class="type" value="actor"/>
                 <a class="add" href="#">Add</a>
             </form>
             <p class="error"></p>

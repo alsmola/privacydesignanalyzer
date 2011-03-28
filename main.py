@@ -7,9 +7,15 @@ import unittest
 from flask import Flask
 from flaskext.sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
-db = SQLAlchemy(app)
+
+uri = 'sqlite:///test.db'
+
+def create_app():
+    app = Flask(__name__)
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
+    return app
+
+db = SQLAlchemy(create_app())
 
 class Application(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -23,28 +29,32 @@ class Datum(db.Model):
     name = db.Column(db.String)
     actor_id = db.Column(db.Integer, db.ForeignKey('actor.id'))
     
-    def __init__(self, name):
+    def __init__(self, name, actor_id):
         self.name = name
+        self.actor_id = actor_id
 
 class Goal(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     actor_id = db.Column(db.Integer, db.ForeignKey('actor.id'))
     
-    def __init__(self, name):
+    def __init__(self, name, actor_id):
         self.name = name
+        self.actor_id = actor_id
 
 class Actor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     app_id = db.Column(db.Integer, db.ForeignKey('application.id'))
-    data = db.relationship('Datum', backref=db.backref('actor', lazy='dynamic'))
-    goals = db.relationship('Goal', backref=db.backref('actor', lazy='dynamic'))
+    data = db.relationship('Datum', backref=db.backref('actor'))
+    goals = db.relationship('Goal', backref=db.backref('actor'))
 
-    def __init__(self, name, datum, goals):
+    def __init__(self, name, app_id, data = [], goals = []):
         self.name = name
+        self.app_id = app_id
         self.data = data
         self.goals = goals
+
 
 class Disclosure(db.Model):
     id = db.Column(db.Integer, primary_key=True)

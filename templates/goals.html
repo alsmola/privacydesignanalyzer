@@ -10,16 +10,16 @@
     <div class="question">
         <p>What are the goals for <span class="actor-name">{{ actor.name }}</span>?</p>    
         <div class="response">
-            <input type="hidden" class="item-type-and-parent-name" value="goal,{{actor}}"/>
-            <ul id="{{actor}}" class="list">
+            <ul id="actor-{{ actor.id }}" class="list">
                 <script type="text/javascript">
-                {% for goal in actor.goals.items %}
-                    $("#{{ actor }}").append(getItemHtml("{{ goal }}"));
+                {% for goal in actor.goals %}
+                    $("#actor-{{ actor.id }}").append(getItemHtml("{{ goal.name }}", "goal", "{{ goal.id }}"));
                 {% endfor %}
                 </script>
             </ul>
             <form class="add-form">
               <input class="add-name">
+              <input type="hidden" class="type" value="goal"/>
               <a class="add" href="#">Add</a>
             </form>
             <p class="error"></p>

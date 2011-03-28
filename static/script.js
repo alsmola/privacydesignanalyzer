@@ -1,73 +1,38 @@
-function addResult(data) {
-    if (data.indexOf('Error') == -1) {
-        name = data.split(',')[0];
-        parent = data.split(',')[1];
-        var list = getList(parent);
-        rowToUpdate = $(list).append(getItemHtml(name));
+function addResult(result) {
+    if (result['success']) {
+        $('#' + result['parent_type'] + '-' + result['parent_id']).append(getItemHtml(result['name'], result['type'], result['id']));
         $('.add-name').val('');
     } else {
-        $('.error').html(data);
+        $('.error').html(result['message']);
     }
 }
 
-function editResult(data) {
-    if (data.indexOf('Error') == -1) {
-        name = data.split(',')[0];
-        newName = data.split(',')[1];
-        parent = data.split(',')[2];
-        rowToUpdate = getRow(name, parent);
-        $(rowToUpdate).find('.update-name').val(newName);
-        $(rowToUpdate).find('.name').text(newName);        
+function editResult(result) {
+    if (result['success']) {
+        rowToUpdate = $('#' + result['type'] + '-' + result['id']);
+        $(rowToUpdate).find('.update-name').val(result['name']);
+        $(rowToUpdate).find('.name').text(result['name']);        
         $(rowToUpdate).find('.update-form').hide();
         $(rowToUpdate).find('.edit-delete').show();
     } else {
-        $('.error').html(data);   
+        $('.error').html(result['message']);
     }
 
 }
 
-function deleteResult(data) {
-    if (data.indexOf('Error') == -1) {
-        name = data.split(',')[0];
-        parent = data.split(',')[1];
-        row = getRow(name, parent);
-        $(row).fadeOut();
-        $(row).remove();
+function deleteResult(result) {
+    if (result['success']) {
+        rowToDelete = $('#' + result['type'] + '-' + result['id']);
+        $(rowToDelete).fadeOut();
+        $(rowToDelete).remove();
     } else {
-        $('.error').html(data);  
+        $('.error').html(result['message']);
     }
 }
 
-function getList(parent) {   
-    var list = null;
-    $('.response').each(function() {        
-        var itemTypeAndParentName = $(this).find('.item-type-and-parent-name').val();
-        if (itemTypeAndParentName.split(',')[0] == 'actor') {
-            list = $(this).children('.list');
-            
-        }
-        if (itemTypeAndParentName.split(',')[1] == parent) {
-            list = $(this).children('.list');
-        }        
-    });
-    return list;
-}
-
-function getRow(name, parent) {
-    var row = null;
-    var list = getList(parent);
-    var children = $(list).children('li');
-    $(children).each(function() {
-        if ($(this).find('.name').text() == name) {
-            row = this;
-        }
-    });
-    return row;
-}
-
-function getItemHtml(name, itemType) {
+function getItemHtml(name, type, id) {
     return '\
-    <li>\
+    <li class="item" id="' + type + '-' + id + '">\
         <form class="update-form">\
             <input class="update-name" value="' + name + '">\
             <a class="update" href="#">Update</a>\
@@ -78,37 +43,35 @@ function getItemHtml(name, itemType) {
             <a class="edit" href="#">Edit</a>\
             <a class="delete" href="#">Delete</a>\
         </div>\
-    </li>';
+    </li>'
 }
 
 function error(thrownError) { 
     $('.error').html(thrownError);
 }
 
-$(document).ready(function () {
-    
+$(document).ready(function () {    
     $(".add").click(function() {
-        var itemTypeAndParentName = $(this).parent().siblings('.item-type-and-parent-name').val();
-        var itemType = itemTypeAndParentName.split(',')[0];
-        var parentItemName = itemTypeAndParentName.split(',')[1];
-        var itemName = $(this).siblings('.add-name').val();
-        $.post('/' + itemType,
-            { name : itemName, parent: parentItemName, verb: 'create' },
+        var name = $(this).siblings('.add-name').val();
+        var parentId = $(this).parent().siblings('.list').attr('id').split('-')[1];
+        var type = $(this).siblings('.type').val();
+        $.post('/' + type,
+            { name : name, verb: 'create', id: -1, parent_id: parentId},
             function(data) {
-                addResult(data, name);
+                addResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
     });
     
     $('.delete').live('click', function () {
-        var itemTypeAndParentName = $(this).parents('.list').siblings('.item-type-and-parent-name').val();
-        var itemType = itemTypeAndParentName.split(',')[0];
-        var parentItemName = itemTypeAndParentName.split(',')[1];
-        var itemName = $(this).siblings('.name').text();
-        $.post('/' + itemType, 
-            { name : itemName, parent: parentItemName, verb: 'delete'},
+        var name = $(this).siblings('.name').text();
+        var type = $(this).parents('.item').attr('id').split('-')[0];
+        var id = $(this).parents('.item').attr('id').split('-')[1];
+        var parentId = $(this).parents('.list').attr('id').split('-')[1];
+        $.post('/' + type, 
+            { name : name, verb: 'delete', id: id, parent_id: parentId},
             function(data) {
-                deleteResult(data, itemName);
+                deleteResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
     });
@@ -124,20 +87,20 @@ $(document).ready(function () {
     })
     
     $('.update').live('click', function () {
-        var itemTypeAndParentName = $(this).parents('.list').siblings('.item-type-and-parent-name').val();
-        var itemType = itemTypeAndParentName.split(',')[0];
-        var parentItemName = itemTypeAndParentName.split(',')[1];
         var name = $(this).parent().siblings('.edit-delete').children('.name').text();
         var newName = $(this).siblings('.update-name').val();
+        var type = $(this).parents('.item').attr('id').split('-')[0];
+        var id = $(this).parents('.item').attr('id').split('-')[1];
+        var parentId = $(this).parents('.list').attr('id').split('-')[1];
         if (name == newName) {
             $(this).parent().hide();
             $(this).parent().siblings('.edit-delete').show();
             return;
         }
-        $.post('/' + itemType, 
-            { name : name, newName: newName, parent: parentItemName, verb: 'edit'},
+        $.post('/' + type, 
+            { name : name, newName: newName, verb: 'edit', id: id, parent_id: parentId},
             function(data) {
-                editResult(data, name);
+                editResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
     });

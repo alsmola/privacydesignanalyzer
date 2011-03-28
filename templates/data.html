@@ -10,16 +10,16 @@
     <div class="question">
         <p>What are the pieces of data for <span class="actor-name">{{ actor.name }}</span>?</p>    
         <div class="response">
-            <input type="hidden" class="item-type-and-parent-name" value="datum,{{actor}}"/>
-            <ul id="{{actor}}" class="list">
+            <ul id="actor-{{ actor.id }}" class="list">
                 <script type="text/javascript">
-                {% for datum in actor.data.items %}
-                    $("#{{ actor }}").append(getItemHtml("{{ datum }}"));
+                {% for datum in actor.data %}
+                    $("#actor-{{ actor.id }}").append(getItemHtml("{{ datum.name }}", "datum", "{{ datum.id }}"));
                 {% endfor %}
                 </script>
             </ul>
             <form class="add-form">
               <input class="add-name">
+              <input type="hidden" class="type" value="datum"/>
               <a class="add" href="#">Add</a>
             </form>
             <p class="error"></p>
