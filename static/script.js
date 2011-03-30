@@ -1,6 +1,10 @@
 function addResult(result) {
     if (result['success']) {
-        $('#' + result['parent_type'] + '-' + result['parent_id']).append(getItemHtml(result['name'], result['type'], result['id']));
+        if (result['parent_type'] == 'none') {
+            $('#applications').append(getItemHtml(result['name'], result['type'], result['id'])).fadeIn();
+        } else {
+            $('#' + result['parent_type'] + '-' + result['parent_id']).append(getItemHtml(result['name'], result['type'], result['id'])).fadeIn();
+        }
         $('.add-name').val('');
     } else {
         $('.error').html(result['message']);
@@ -13,7 +17,7 @@ function editResult(result) {
         $(rowToUpdate).find('.update-name').val(result['name']);
         $(rowToUpdate).find('.name').text(result['name']);        
         $(rowToUpdate).find('.update-form').hide();
-        $(rowToUpdate).find('.edit-delete').show();
+        $(rowToUpdate).find('.edit-delete').fadeIn('slow');
     } else {
         $('.error').html(result['message']);
     }
@@ -24,26 +28,31 @@ function deleteResult(result) {
     if (result['success']) {
         rowToDelete = $('#' + result['type'] + '-' + result['id']);
         $(rowToDelete).fadeOut();
-        $(rowToDelete).remove();
     } else {
         $('.error').html(result['message']);
     }
 }
 
 function getItemHtml(name, type, id) {
-    return '\
+    html = '\
     <li class="item" id="' + type + '-' + id + '">\
         <form class="update-form">\
             <input class="update-name" value="' + name + '">\
             <a class="update" href="#">Update</a>\
             <a class="cancel" href="#">Cancel</a>\
         </form>\
-        <div class="edit-delete">\
-            <span class="name">' + name + '</span>\
+        <div class="edit-delete">'
+    if (type == 'application') {
+        html += '<a href="/actors?app_id=' + id + '"><span class="name">' + name + '</span></a>'
+    } else {
+        html += '<span class="name">' + name + '</span>'
+    }
+    html += '\
             <a class="edit" href="#">Edit</a>\
             <a class="delete" href="#">Delete</a>\
         </div>\
     </li>'
+    return html;
 }
 
 function error(thrownError) { 
@@ -52,17 +61,21 @@ function error(thrownError) {
 
 $(document).ready(function () {    
     
-    
-    $(".add").click(function() {
-        var name = $(this).siblings('.add-name').val();
-        var parentId = $(this).parent().siblings('.list').attr('id').split('-')[1];
-        var type = $(this).siblings('.type').val();
+    $('.add-form').submit(function(event) {
+        event.preventDefault();
+        var name = $(this).children('.add-name').val();
+        var parentId = $(this).siblings('.list').attr('id').split('-')[1];
+        var type = $(this).children('.type').val();
         $.post('/' + type,
             { name : name, verb: 'create', id: -1, parent_id: parentId},
             function(data) {
                 addResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+    });
+    
+    $('.add').click(function() {
+        $(this).parents('.add-form').submit();
     });
     
     $('.delete').live('click', function () {
@@ -80,23 +93,24 @@ $(document).ready(function () {
     
     $('.edit').live('click', function() {
         $(this).parent().hide();
-        $(this).parent().siblings('.update-form').show();
+        $(this).parent().siblings('.update-form').fadeIn();
     })
     
     $('.cancel').live('click', function() {
         $(this).parent().hide();
-        $(this).parent().siblings('.edit-delete').show();
+        $(this).parent().siblings('.edit-delete').fadeIn();
     })
     
-    $('.update').live('click', function () {
-        var name = $(this).parent().siblings('.edit-delete').children('.name').text();
-        var newName = $(this).siblings('.update-name').val();
+    $('.update-form').live('submit', function(event) {
+        event.preventDefault();
+        var name = $(this).siblings('.edit-delete').children('.name').text();
+        var newName = $(this).children('.update-name').val();
         var type = $(this).parents('.item').attr('id').split('-')[0];
         var id = $(this).parents('.item').attr('id').split('-')[1];
         var parentId = $(this).parents('.list').attr('id').split('-')[1];
         if (name == newName) {
             $(this).parent().hide();
-            $(this).parent().siblings('.edit-delete').show();
+            $(this).parent().siblings('.edit-delete').fadeIn();
             return;
         }
         $.post('/' + type, 
@@ -105,5 +119,9 @@ $(document).ready(function () {
                 editResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+    });
+    
+    $('.update').live('click', function () {
+        $(this).parents('.update-form').submit();
     });
 });

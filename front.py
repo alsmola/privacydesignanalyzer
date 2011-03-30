@@ -4,11 +4,30 @@ from flaskext.sqlalchemy import SQLAlchemy
 import main
 
 app = Flask(__name__)
-app_id = 1
 
 @app.route("/")
 def start():
-    return render_template('start.html', apps = Application.query.all())
+    return render_template('start.html', applications = Application.query.all())
+    
+@app.route("/application", methods = ['POST',])
+def application():
+    id = request.form['id']
+    name = request.form['name']
+    verb = request.form['verb']
+    if verb == 'create':
+        application = Application(name)
+        db.session.add(application)
+    else:
+        application = Application.query.filter_by(id=id).first()
+        if (verb == 'delete'):    
+            db.session.delete(application)
+        elif (verb == 'edit'):
+            new_name = request.form['newName']
+            application.name = new_name
+            name = new_name
+    db.session.commit()
+    id = application.id
+    return jsonify(id=id, name=name, verb=verb, parent_id=-1, success = True, type = 'application', parent_type = 'none')
 
 @app.route("/actors", methods=['GET',])
 def actors():
@@ -38,8 +57,9 @@ def actor():
     
 @app.route("/goals")
 def goals():
+    app_id = request.args['app_id']
     actors = Actor.query.filter_by(app_id=app_id).all()
-    return render_template('goals.html', actors = Actor.query.filter_by(app_id=app_id).all())
+    return render_template('goals.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/goal', methods=['POST',])
 def goal():
@@ -65,7 +85,8 @@ def goal():
 
 @app.route("/data")
 def data():
-    return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all())
+    app_id = request.args['app_id']
+    return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/datum', methods=['POST',])
 def datum():
@@ -90,6 +111,7 @@ def datum():
 
 @app.route("/disclosures")
 def disclosures():
+    app_id = request.args['app_id']
     return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/disclosure", methods=['POST',])
@@ -111,7 +133,8 @@ def disclosure():
 
 @app.route("/mitigations")
 def mitigations():
-    return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
+    app_id = request.args['app_id']
+    return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
 
 @app.route("/mitigation", methods=['POST',])
 def mitigation():
@@ -131,6 +154,7 @@ def mitigation():
         
 @app.route("/impacts")
 def impacts():
+    app_id = request.args['app_id']    
     return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/impact", methods=['POST',])
@@ -151,7 +175,8 @@ def impact():
 
 @app.route("/result")
 def result():
-    return render_template('result.html')
+    app_id = request.args['app_id']
+    return render_template('result.html', app_id=app_id)
 
 @app.route("/reset")
 def reset():   
