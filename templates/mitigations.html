@@ -43,6 +43,10 @@
             </tr>
         {% endfor %}
     </table>
+    <div id="nav">
+        <a class="prev" href="/disclosures?app_id={{ app_id }}">&lt; Prev (Disclosures)</a>
+        <a class="next" href="/impacts?app_id={{ app_id }}">Next (Impacts) &gt;</a>
+    </div>
 {% endblock %}
 
 {% macro checked(disclosure_id, category) %}

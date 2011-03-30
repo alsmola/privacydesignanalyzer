@@ -51,6 +51,8 @@ function error(thrownError) {
 }
 
 $(document).ready(function () {    
+    
+    
     $(".add").click(function() {
         var name = $(this).siblings('.add-name').val();
         var parentId = $(this).parent().siblings('.list').attr('id').split('-')[1];

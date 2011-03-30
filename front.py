@@ -8,16 +8,11 @@ app_id = 1
 
 @app.route("/")
 def start():
-    if len(Application.query.all()) < 1:
-        this_app = Application('Test App')
-        db.session.add(this_app)
-        db.session.commit()
-    else:
-        this_app = Application.query.limit(1).first()
-    return render_template('start.html', app_id = this_app.id)
+    return render_template('start.html', apps = Application.query.all())
 
 @app.route("/actors", methods=['GET',])
 def actors():
+    app_id = request.args['app_id']
     return render_template('actors.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/actor', methods=['POST',])
@@ -154,30 +149,42 @@ def impact():
     id = impact.id
     return jsonify(id=id, success = True)
 
+@app.route("/result")
+def result():
+    return render_template('result.html')
+
 @app.route("/reset")
 def reset():   
     db.drop_all()
     db.create_all()
-    return "Reset"
+    return "Success"
 
-@app.route("/p2pu")
-def p2pu():
-#    learners = Actor('Learners', Group([Goal('Learn about subjects from peer contributions'), Goal('Contribute to others\' learning by asking helpful questions and providing feedback'), Goal('Avoid revealing embarrassing or otherwise harmful information online')]), Group([Datum('Display Name'), Datum('Username'), Datum('First & last name'), Datum('Email address'), Datum('Password'), Datum('Location'), Datum('Bio'), Datum('Profile image'), Datum('Links'), Datum('RSS feeds from links'), Datum('Followers'), Datum('Follower count'), Datum('Following'), Datum('Following count'), Datum('Enrolled courses'), Datum('Private messages'), Datum('Clickstream activity')]))
-#    facilitators = Actor('Facilitators', Group([Goal('Organize courses that are compelling and informative'), Goal('Encourage feedback and student participation'), Goal('Avoid revealing embarrassing or otherwise harmful information online')]), Group([]))
-#    organizers = Actor('Organizers', Group([Goal('Create an open environment for learning'), Goal('Bring high-quality learning material to as many people who want it as possible'), Goal('Respect users by recognizing and appropriately treating sensitive information')]), Group([]))
-#    developers = Actor('Developers', Group([Goal('Develop systems that are functional'), Goal('Develop systems that are usable'), Goal('Develop systems that are safe')]), Group([]))
-#    research = Actor('Research community', Group([Goal('Conduct research and experiments that provide insight and guidance to academia and professional spheres'), Goal('Follow ethical guidelines')]), Group([]))
-#    search = Actor('Search engines', Group([Goal('Make all information on the web easily accessible to every web user'), Goal('Follow sites directives with regards to spidering and storing information')]), Group([]))
-#    public = Actor('Public', Group(['Benefit from courses without directly participating']), Group([]))
-#    isp = Actor('Internet service providers', Group([Goal('Offer reliable, affordable service'), Goal('Abide by local laws and regulations')]), Group([]))
-#    govt = Actor('Governments', Group([Goal('Ensure safety and security')]), Group([]))
-#    main.get_actors() = Group([learners, facilitators, organizers, developers, research, search, public, isp, govt])
-#    session['disclosures'] = []
-#    session['mitigations'] = []
-#    session['impacts'] = []
-#    session.modified = True
-    return 'Length: %s' % (len(main.get_actors()))
-
+@app.route("/test")
+def test():
+    this_app = Application('Test App')
+    db.session.add(this_app)
+    db.session.commit()
+    
+    actorGoals = { 'Users' : ['Communicate online', 'Protect privacy'], 'Developers' : ['Develop systems that are functional', 'Develop systems that are usable', 'Develop systems that are safe'], 'Search engines' : ['Make all information on the web easily accessible to every web user', 'Follow sites directives with regards to spidering and storing information'], 'Public' : ['Find useful information online'], 'Internet service providers' : ['Offer reliable, affordable service', 'Abide by local laws and regulations'], 'Governments' : ['Ensure safety and security'] }    
+    actorData = { 'Users' : [ 'Username', 'First & last name', 'Email address', 'Password', 'Private messages', 'Clickstream activity'] }
+    users = Actor('Users', this_app.id)
+    developers = Actor('Developers', this_app.id)
+    search = Actor('Search engines', this_app.id)
+    public = Actor('Public', this_app.id)
+    isp = Actor('Internet service providers', this_app.id)
+    govt = Actor('Governments', this_app.id)
+    actors = [users, developers, search, public, isp, govt]
+    for actor in actors:
+        db.session.add(actor)
+        db.session.commit()
+        if actor.name in actorGoals:
+            for goal in actorGoals[actor.name]:
+                db.session.add(Goal(goal, actor.id))
+        if actor.name in actorData:
+            for datum in actorData[actor.name]:
+                db.session.add(Datum(datum, actor.id))
+        db.session.commit()
+    return "Success"
     
 app.secret_key = ''
 

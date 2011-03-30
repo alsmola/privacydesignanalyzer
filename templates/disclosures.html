@@ -45,7 +45,13 @@
         {% endfor %}
     {% endfor %}
     </table>
+    <div id="nav">
+        <a class="prev" href="/goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
+        <a class="next" href="/mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
+    </div>
+
 {% endblock %}
+
 
 {% macro checked(from_actor_id, datum_id, to_actor_id) %}
     {% for d in disclosures %}

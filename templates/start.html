@@ -5,7 +5,12 @@
         $('#start').addClass('selected');
     });
 </script>
-<p id="welcome">Welcome to the Privacy Design Analysis Toolkit</p>
-<a href="/actors">Start questionnaire...</a>
-
+    <div class="question">
+        <p id="welcome">Welcome to the Privacy Design Analysis Toolkit. Select an application.</p>
+        <ul id="apps">
+        {% for app in apps %}
+            <li><a href="/actors?app_id={{ app.id }}"> {{ app.name }} </a></li>
+        {% endfor %}
+        </ul>
+    </div>
 {% endblock %}

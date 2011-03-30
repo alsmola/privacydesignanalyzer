@@ -12,13 +12,13 @@
     <div id="title">Privacy Design Analysis</div>
     <ul id="sidebar">
             <li id="start"><a href="/">Start</a></li>
-            <li id="actors"><a href="/actors">Actors</a></li>
-            <li id="goals"><a href="/goals">Goals</a></li>
-            <li id="data"><a href="/data">Data</a></li>
-            <li id="disclosures"><a href="/disclosures">Disclosures</a></li>
-            <li id="mitigations"><a href="/mitigations">Mitigations</a></li>
-            <li id="impacts"><a href="/impacts">Impacts</a></li>
-            <li id="results"><a href="/results">Result</a></li>
+            <li id="actors"><a href="/actors?app_id={{ app_id }}">Actors</a></li>
+            <li id="goals"><a href="/goals?app_id={{ app_id }}">Goals</a></li>
+            <li id="data"><a href="/data?app_id={{ app_id }}">Data</a></li>
+            <li id="disclosures"><a href="/disclosures?app_id={{ app_id }}">Disclosures</a></li>
+            <li id="mitigations"><a href="/mitigations?app_id={{ app_id }}">Mitigations</a></li>
+            <li id="impacts"><a href="/impacts?app_id={{ app_id }}">Impacts</a></li>
+            <li id="result"><a href="/result?app_id={{ app_id }}">Result</a></li>
     </ul>
     <div id="content">
         {% block body %}{% endblock %}

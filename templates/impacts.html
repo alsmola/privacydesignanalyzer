@@ -42,9 +42,9 @@
                                 <td class="goal" id="goal-{{goal.id}}">{{goal.name}}</td>
                                 <td>
                                     <select class="effect">
-                                        <option value="support"{{selected(mitigation.id, 'support')}}>Support</option>
-                                        <option value="neutral" {{selected(mitigation.id, 'neutral')}}>Neutral</option>
-                                        <option value="harm"{{selected(mitigation.id, 'harm')}}>Harm</option>
+                                        <option value="support"{{selected(mitigation.id, goal.id, 'support')}}>Support</option>
+                                        <option value="neutral" {{selected(mitigation.id, goal.id, 'neutral')}}>Neutral</option>
+                                        <option value="harm"{{selected(mitigation.id, goal.id, 'harm')}}>Harm</option>
                                     </select>
                                 </td>
                             </tr>
@@ -59,15 +59,20 @@
             </tr>
         {% endfor %}
     </table>
+    
+    <div id="nav">
+        <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
+        <a class="next" href="/results?app_id={{ app_id }}">Next (Results) &gt;</a>
+    </div>
 {% endblock %}
 
-{% macro selected(mitigation_id, effect) %}
+{% macro selected(mitigation_id, goal_id, effect) %}
     {% for i in impacts %}
-        {% if i.mitigation_id == mitigation_id and m.effect == effect %}
+        {% if i.mitigation_id == mitigation_id and i.goal_id == goal_id and i.effect == effect %}
             selected = "true"
         {% endif %}
         
-        note = "{{i.goal_id | mitigation_id}}"
+        note = "{{i.goal_id }} | {{ mitigation_id}}"
     {% endfor %}
 {% endmacro %}
 
