@@ -7,7 +7,6 @@ import unittest
 from flask import Flask
 from flaskext.sqlalchemy import SQLAlchemy
 
-
 uri = 'sqlite:///test.db'
 
 def create_app():
