@@ -1,2 +1,6 @@
 *.tmproj
 *.pyc
+.gitignore
+my.py
+jquery*.*
+*.db
