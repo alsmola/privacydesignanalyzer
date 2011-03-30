@@ -89,8 +89,10 @@ class Mitigation(db.Model):
 class Impact(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     app_id = db.Column(db.Integer, db.ForeignKey('application.id'))
-    mitigation_id = db.Column(db.Integer, db.ForeignKey('disclosure.id'))    
+    mitigation_id = db.Column(db.Integer, db.ForeignKey('mitigation.id'))  
+    mitigation = db.relationship('Mitigation', backref=db.backref('impact'))
     goal_id = db.Column(db.Integer, db.ForeignKey('goal.id'))
+    goal = db.relationship('Goal', backref=db.backref('impact'))
     effect = db.Column(db.String)
     def __init__(self, app_id, mitigation_id, goal_id, effect):
         self.app_id = app_id

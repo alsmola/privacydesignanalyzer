@@ -190,6 +190,11 @@ def test():
     db.session.add(this_app)
     db.session.commit()
     
+@app.route("/test2")
+def reset():   
+    Mitigation.query.delete()
+    return "Success"
+    
     actorGoals = { 'Users' : ['Communicate online', 'Protect privacy'], 'Developers' : ['Develop systems that are functional', 'Develop systems that are usable', 'Develop systems that are safe'], 'Search engines' : ['Make all information on the web easily accessible to every web user', 'Follow sites directives with regards to spidering and storing information'], 'Public' : ['Find useful information online'], 'Internet service providers' : ['Offer reliable, affordable service', 'Abide by local laws and regulations'], 'Governments' : ['Ensure safety and security'] }    
     actorData = { 'Users' : [ 'Username', 'First & last name', 'Email address', 'Password', 'Private messages', 'Clickstream activity'] }
     users = Actor('Users', this_app.id)

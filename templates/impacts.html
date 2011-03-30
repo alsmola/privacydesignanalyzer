@@ -71,8 +71,6 @@
         {% if i.mitigation_id == mitigation_id and i.goal_id == goal_id and i.effect == effect %}
             selected = "true"
         {% endif %}
-        
-        note = "{{i.goal_id }} | {{ mitigation_id}}"
     {% endfor %}
 {% endmacro %}
 
