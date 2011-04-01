@@ -11,7 +11,7 @@
     
     $(document).ready(function () {
         $('#mitigations').addClass('selected');
-        $('.mitigation input').live('change', function () {
+        $('.choice input').live('change', function () {
             var app_id = $(this).parents('.mitigations').attr('id').split('-')[1];
             var flagged = $(this).attr('checked');
             var category = $(this).siblings().text();
@@ -30,16 +30,17 @@
         <tr><th>Mitigation</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
         {% for disclosure in disclosures %}
             <tr class="disclosure" id="disclosure-{{disclosure.id}}">
-                <td>
-                    {% for category in categories %}
-                    <div class="mitigation">
-                    <input type="checkbox" {{checked(disclosure.id, category)}}><span>{{category}}</span>
-                    </div>
-                    {% endfor %}
-                </td>
                 <td>{{disclosure.from_actor.name}}</td>
                 <td>{{disclosure.datum.name}}</td>
                 <td>{{disclosure.to_actor.name}}</td>
+                <td>
+                    {% for category in categories %}
+                    <div class="choice">
+                        <input type="checkbox" {{checked(disclosure.id, category)}}>
+                        <span>{{category}}</span>
+                    </div>
+                    {% endfor %}
+                </td>
             </tr>
         {% endfor %}
     </table>

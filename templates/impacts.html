@@ -15,7 +15,7 @@
         $('.effect').live('change', function () {
             var app_id = $(this).parents('.impacts').attr('id').split('-')[1];
             var mitigation_id = $(this).parents('.mitigation-row').attr('id').split('-')[1];
-            var goal_id = $(this).parent().siblings('.goal').attr('id').split('-')[1];
+            var goal_id = $(this).parent().siblings().children('.goal').attr('id').split('-')[1];
             var effect = $(this).val();
             
             $.post('/impact', 
@@ -29,17 +29,20 @@
     </script>
 
     <table class="impacts" id="app-{{app_id}}">
-        <tr><th>Impact</th><th>Category</th><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
+        <tr><th>From Actor</th><th>Data</th><th>To Actor</th><th>Category</th><th>Impact</th></tr>
         {% for mitigation in mitigations %}
             <tr class="mitigation-row" id="mitigation-{{mitigation.id}}">
+                <td>{{mitigation.disclosure.from_actor.name}}</td>
+                <td>{{mitigation.disclosure.datum.name}}</td>
+                <td>{{mitigation.disclosure.to_actor.name}}</td>
+                <td>{{mitigation.category}}</td>
                 <td>
                     <table>
-                        <th>Actor</th><th>Goal</th><th>Support/Neutral/Harm</th>
+                        <th>Actor | Goal</th><th>Support/Neutral/Harm</th>
                         {% for actor in actors %}
                             {% for goal in actor.goals %}
                             <tr>
-                                <td>{{actor.name}}</td>
-                                <td class="goal" id="goal-{{goal.id}}">{{goal.name}}</td>
+                                <td><span class="actor">{{actor.name}}</span> | <span class="goal" id="goal-{{goal.id}}">{{goal.name}}</td>
                                 <td>
                                     <select class="effect">
                                         <option value="support"{{selected(mitigation.id, goal.id, 'support')}}>Support</option>
@@ -52,10 +55,6 @@
                         {% endfor %}
                     </table>
                 </td>
-                <td>{{mitigation.category}}</td>
-                <td>{{mitigation.disclosure.from_actor.name}}</td>
-                <td>{{mitigation.disclosure.datum.name}}</td>
-                <td>{{mitigation.disclosure.to_actor.name}}</td>
             </tr>
         {% endfor %}
     </table>

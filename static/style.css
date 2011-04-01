@@ -56,23 +56,20 @@ a {
 color: green;
 }
 
+#title {
+margin-bottom: 20px;
+}
+
 p, #title {
 padding: 5px;
 background-color: green;
 }
 
-#content {
-}
-
-#title {
-margin-bottom: 20px;
-}
-
 #sidebar {
 float: left;
 list-style: none;
-width: 180px;
-margin-left: 20px;
+margin: 0 20px;
+width: 120px;
 }
 
 #sidebar a {
@@ -87,8 +84,9 @@ color: white;
 }
 
 #content {
-margin: 0 0 20px 220px;
-width: 500px;   
+float: left;
+margin: 0 auto;
+width: 600px;
 }
 
 #apps {
@@ -104,6 +102,22 @@ margin-bottom: 20px;
 
 .response {
 padding: 10px;
+}
+
+.update-name, .name {
+float: left;
+background-color: white;
+padding: 0;
+margin-right: 10px;
+}
+
+/* Clearfix hack */ 
+.cancel:after, .delete:after {
+content: ".";
+display: block;
+height: 0;
+clear: both;
+visibility: hidden;
 }
 
 .error {
@@ -145,13 +159,13 @@ margin: 10px 0;
 }
 
 table {
-border: 1px solid #888;
 text-align: center;
 }
 
 td {
-border: 1px solid #888; 
+border-bottom: 1px solid #888; 
 padding: 5px;
+background-color: white;
 }
 
 th {
@@ -159,7 +173,7 @@ background-color: green;
 padding: 5px;    
 }
 
-.mitigation {
+.choice {
 display: block;
 text-align: left;
 }

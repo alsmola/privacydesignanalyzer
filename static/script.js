@@ -37,7 +37,7 @@ function getItemHtml(name, type, id) {
     html = '\
     <li class="item" id="' + type + '-' + id + '">\
         <form class="update-form">\
-            <input class="update-name" value="' + name + '">\
+            <input class="update-name" value="' + name + '"/>\
             <a class="update" href="#">Update</a>\
             <a class="cancel" href="#">Cancel</a>\
         </form>\
@@ -45,7 +45,7 @@ function getItemHtml(name, type, id) {
     if (type == 'application') {
         html += '<a href="/actors?app_id=' + id + '"><span class="name">' + name + '</span></a>'
     } else {
-        html += '<span class="name">' + name + '</span>'
+        html += '<p class="name">' + name + '</p>'
     }
     html += '\
             <a class="edit" href="#">Edit</a>\
@@ -72,6 +72,7 @@ $(document).ready(function () {
                 addResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        return false;
     });
     
     $('.add').click(function() {
@@ -89,17 +90,20 @@ $(document).ready(function () {
                 deleteResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        return false;
     });
     
     $('.edit').live('click', function() {
         $(this).parent().hide();
         $(this).parent().siblings('.update-form').fadeIn();
-    })
+        return false;
+    });
     
     $('.cancel').live('click', function() {
         $(this).parent().hide();
         $(this).parent().siblings('.edit-delete').fadeIn();
-    })
+        return false;
+    });
     
     $('.update-form').live('submit', function(event) {
         event.preventDefault();
@@ -111,7 +115,7 @@ $(document).ready(function () {
         if (name == newName) {
             $(this).parent().hide();
             $(this).parent().siblings('.edit-delete').fadeIn();
-            return;
+            return false;
         }
         $.post('/' + type, 
             { name : name, newName: newName, verb: 'edit', id: id, parent_id: parentId},
@@ -119,9 +123,11 @@ $(document).ready(function () {
                 editResult(data);
             }
         ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+        return false;
     });
     
     $('.update').live('click', function () {
         $(this).parents('.update-form').submit();
+        return false;
     });
 });
