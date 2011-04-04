@@ -42,26 +42,29 @@
 
     <div class="impacts" id="app-{{app_id}}">
         {% for mitigation in mitigations %}
-            {% for actor in actors %}
-                {% for goal in actor.goals %}
-            <form class="impact-row" id="mitigation-{{mitigation.id}}">
-                    <div class="mitigation" id="goal-{{goal.id}}">
+            <div class="impact-row" id="mitigation-{{mitigation.id}}">
+                    <div class="mitigation">
                         When <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
                         discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
                         to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>, and the design alternative is
-                        <span class="variable-text">{{mitigation.category}}</span>, 
-                        <span class="variable-text">{{actor.name}}</span> goal of <span class="variable-text">{{goal.name}}</span> is:
-                    </div>    
-                    <ul class="effects">
-                        
-                        <li class="effect"><input type="radio" name="effects" class="support" value="support" {{checked(mitigation.id, goal.id, 'support')}}/><label>Supported</label></li>
-                        <li class="effect"><input type="radio" name="effects" class="neutral" value="neutral" {{checked(mitigation.id, goal.id, 'neutral')}})}}/><label>Unaffected</label></li>
-                        <li class="effect"><input type="radio" name="effects" class="harm" value="harm"  {{checked(mitigation.id, goal.id, 'harm')}}/><label>Harmed</label></li>
-                    </ul>
+                        <span class="variable-text">{{mitigation.category}}</span>,
+                    </div>
+                    {% for actor in actors %}
+                        {% for goal in actor.goals %}    
+                    <form class="effects-form" id="goal-{{goal.id}}">
+                        <div class="actor-goal">
+                            ...<span class="variable-text">{{actor.name}}</span> goal of <span class="variable-text">{{goal.name}}</span> is:
+                        </div>
+                        <ul class="effects">
+                            <li class="effect"><input type="radio" name="effects" class="support" value="support" {{checked(mitigation.id, goal.id, 'support')}}/><label>Supported</label></li>
+                            <li class="effect"><input type="radio" name="effects" class="neutral" value="neutral" {{checked(mitigation.id, goal.id, 'neutral')}})}}/><label>Unaffected</label></li>
+                            <li class="effect"><input type="radio" name="effects" class="harm" value="harm"  {{checked(mitigation.id, goal.id, 'harm')}}/><label>Harmed</label></li>
+                        </ul>
+                    </form>
+                        {% endfor %}
+                    {% endfor %}
                     <div class="clear"></div>
-                </form>
-                {% endfor %}
-            {% endfor %}
+                </div>
         {% endfor %}
     </div>
     

@@ -5,7 +5,57 @@
         $('#result').addClass('selected');
     });
 </script>
-<p>Placeholder for final report.</p>
+    <div class="result">
+        <p>The following mitigations support goals:</p>
+        <div class="result-mitigations">
+            <ul>
+                {% for mitigation in support %}
+                <li>
+                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
+    <div class="result">
+        <p>The following mitigations do not affect or have mixed effects on goals:</p>
+        <div class="result-mitigations">
+            <ul>
+                {% for mitigation in neutral %}
+                <li>
+                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    
+    <div class="result">
+        <p>The following mitigations harm goals:</p>
+        <div class="result-mitigations">
+            <ul>
+                {% for mitigation in harm %}
+                <li>
+                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <div id="nav">
+        <a href="/export?format=json&amp;app_id={{ app_id }}" class="export">Export to JSON</a>
+        <a href="/export?format=csv&amp;app_id={{ app_id }}" class="export">Export to CSV</a>
+    </div>
 
 {% endblock %}

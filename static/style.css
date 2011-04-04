@@ -95,13 +95,13 @@ list-style: none;
 padding: 20px;
 }
 
-.question {
+.question, .result {
 background-color: white;
 margin-bottom: 20px;
 }
 
-.response {
-padding: 10px;
+.response, .result-mitigations {
+padding: 0 10px;
 }
 
 .update-name, .name {
@@ -133,7 +133,7 @@ float: left;
 float: right;
 }
 
-.edit, .delete, .update, .cancel, .select-all, .select-none {
+.edit, .delete, .update, .cancel, .add, .select-all, .select-none, #nav {
 font-size: .75em;
 }
 
@@ -179,18 +179,17 @@ padding: 10px;
 background-color: white;
 }
 
-.from-actor-data, .disclosure, .mitigation {
+.from-actor-data, .disclosure, .actor-goal {
 float: left;
-width: 290px;
+width: 360px;
 }
 
-.to-actor, .alternatives, .actor-goal-effects {
+.to-actor, .alternatives, .effects {
 float: left;
-width: 290px;
+width: 220px;
 }
 
 .effects {
-float: left;
 list-style: none;
 }
 
@@ -205,6 +204,7 @@ text-align: left;
 
 .variable-text {
 color: green;
+text-transform: lowercase;
 }
 
 .actor-goal .variable-text {
@@ -213,4 +213,17 @@ color: green;
 
 .clear {
 clear: both;
+}
+
+.result ul {
+list-style: none;
+}
+
+.result li {
+margin-bottom: 10px;
+}
+
+.result-mitigations {
+padding-top: 10px;
+padding-bottom: 10px;
 }

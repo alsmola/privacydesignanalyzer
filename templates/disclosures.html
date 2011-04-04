@@ -34,17 +34,16 @@
         {% for datum in from_actor.data %}
         <div class="disclosure-row">
             <div class="from-actor-data">
+                It may be considered a privacy violation if 
                 <span id="fromactor-{{from_actor.id}}" class="variable-text">{{from_actor.name}}</span> disclose their 
                 <span id="datumid-{{datum.id}}" class="variable-text">{{datum.name}}</span> to:
             </div>
             <div class="to-actor">
                 {% for to_actor in actors %}
-                    {% if from_actor.name != to_actor.name %}
-                    <div class="choice">
-                        <input type="checkbox" class="flagged" {{checked(from_actor.id, datum.id, to_actor.id)}}/>
-                        <span id="toactorid-{{to_actor.id}}">{{to_actor.name}}</span>
-                    </div>
-                    {% endif %}
+                <div class="choice">
+                    <input type="checkbox" class="flagged" {{checked(from_actor.id, datum.id, to_actor.id)}}/>
+                    <span id="toactorid-{{to_actor.id}}">{{to_actor.name}}</span>
+                </div>
                 {% endfor %}
                 <a href="#" class="select-all">Select All</a> | <a href="#" class="select-none">Select None</a>
             </div>

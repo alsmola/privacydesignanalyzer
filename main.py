@@ -100,5 +100,19 @@ class Impact(db.Model):
         self.goal_id = goal_id
         self.effect = effect
         
+def get_mitigations(effect, app_id):
+    mitigations = []
+    for m in Mitigation.query.all():
+        support = Impact.query.filter('Impact.app_id == app_id').filter('Impact.mitigation_id == %d' % (m.id)).filter('effect == "support"').count()
+        harm = Impact.query.filter('Impact.app_id == app_id').filter('Impact.mitigation_id == %d' % (m.id)).filter('effect == "harm"').count()
+        if (support > harm and effect == 'support'):
+            mitigations.append(m)
+        elif (support < harm and effect == 'harm'):
+            mitigations.append(m)
+        elif (support == harm and effect == 'neutral'):
+            mitigations.append(m)
+    return mitigations
+            
+        
 categories = ['Anonymity', 'Pseudonymity', 'Aggregation', 'Limited Audience', 'Notice', 'Choice']
 effects = ['Support', 'Harm', 'No effect']

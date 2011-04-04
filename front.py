@@ -176,7 +176,7 @@ def impact():
 @app.route("/result")
 def result():
     app_id = request.args['app_id']
-    return render_template('result.html', app_id=app_id)
+    return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id))
 
 @app.route("/reset")
 def reset():   
@@ -209,7 +209,7 @@ def test():
                 db.session.add(Datum(datum, actor.id))
         db.session.commit()
     return "Success"
-    
+  
 app.secret_key = ''
 
 if __name__ == "__main__":

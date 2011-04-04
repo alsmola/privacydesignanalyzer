@@ -130,4 +130,16 @@ $(document).ready(function () {
         $(this).parents('.update-form').submit();
         return false;
     });
+    
+    
+    $('.select-all').live('click', function() {
+        $(this).siblings('.choice').find('input').attr('checked', 'true');
+       return false; 
+    });
+    
+    $('.select-none').live('click', function() {
+        $(this).siblings('.choice').find('input').removeAttr('checked');
+       return false; 
+    });
+    
 });
