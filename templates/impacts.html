@@ -12,10 +12,22 @@
     $(document).ready(function () {
         $('#impacts').addClass('selected');
         
-        $('.effect').live('change', function () {
+        $('.effects').each(function() {
+            var chosen = false;
+            $(this).find('.effect input').each(function () {
+               if ($(this).attr('checked')) {
+                   chosen = true;
+               }
+            });
+            if (!chosen) {
+                $(this).find('.neutral').attr('checked', 'true');
+            }
+        });
+        
+        $('.effect input').live('change', function () {
             var app_id = $(this).parents('.impacts').attr('id').split('-')[1];
-            var mitigation_id = $(this).parents('.mitigation-row').attr('id').split('-')[1];
-            var goal_id = $(this).parent().siblings().children('.goal').attr('id').split('-')[1];
+            var mitigation_id = $(this).parents('.impact-row').attr('id').split('-')[1];
+            var goal_id = $(this).parents('.effects').siblings('.mitigation').attr('id').split('-')[1];
             var effect = $(this).val();
             
             $.post('/impact', 
@@ -28,36 +40,30 @@
     });
     </script>
 
-    <table class="impacts" id="app-{{app_id}}">
-        <tr><th>From Actor</th><th>Data</th><th>To Actor</th><th>Category</th><th>Impact</th></tr>
+    <div class="impacts" id="app-{{app_id}}">
         {% for mitigation in mitigations %}
-            <tr class="mitigation-row" id="mitigation-{{mitigation.id}}">
-                <td>{{mitigation.disclosure.from_actor.name}}</td>
-                <td>{{mitigation.disclosure.datum.name}}</td>
-                <td>{{mitigation.disclosure.to_actor.name}}</td>
-                <td>{{mitigation.category}}</td>
-                <td>
-                    <table>
-                        <th>Actor | Goal</th><th>Support/Neutral/Harm</th>
-                        {% for actor in actors %}
-                            {% for goal in actor.goals %}
-                            <tr>
-                                <td><span class="actor">{{actor.name}}</span> | <span class="goal" id="goal-{{goal.id}}">{{goal.name}}</td>
-                                <td>
-                                    <select class="effect">
-                                        <option value="support"{{selected(mitigation.id, goal.id, 'support')}}>Support</option>
-                                        <option value="neutral" {{selected(mitigation.id, goal.id, 'neutral')}}>Neutral</option>
-                                        <option value="harm"{{selected(mitigation.id, goal.id, 'harm')}}>Harm</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% endfor %}
-                    </table>
-                </td>
-            </tr>
+            {% for actor in actors %}
+                {% for goal in actor.goals %}
+            <form class="impact-row" id="mitigation-{{mitigation.id}}">
+                    <div class="mitigation" id="goal-{{goal.id}}">
+                        When <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
+                        discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                        to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>, and the design alternative is
+                        <span class="variable-text">{{mitigation.category}}</span>, 
+                        <span class="variable-text">{{actor.name}}</span> goal of <span class="variable-text">{{goal.name}}</span> is:
+                    </div>    
+                    <ul class="effects">
+                        
+                        <li class="effect"><input type="radio" name="effects" class="support" value="support" {{checked(mitigation.id, goal.id, 'support')}}/><label>Supported</label></li>
+                        <li class="effect"><input type="radio" name="effects" class="neutral" value="neutral" {{checked(mitigation.id, goal.id, 'neutral')}})}}/><label>Unaffected</label></li>
+                        <li class="effect"><input type="radio" name="effects" class="harm" value="harm"  {{checked(mitigation.id, goal.id, 'harm')}}/><label>Harmed</label></li>
+                    </ul>
+                    <div class="clear"></div>
+                </form>
+                {% endfor %}
+            {% endfor %}
         {% endfor %}
-    </table>
+    </div>
     
     <div id="nav">
         <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
@@ -65,10 +71,10 @@
     </div>
 {% endblock %}
 
-{% macro selected(mitigation_id, goal_id, effect) %}
+{% macro checked(mitigation_id, goal_id, effect) %}
     {% for i in impacts %}
         {% if i.mitigation_id == mitigation_id and i.goal_id == goal_id and i.effect == effect %}
-            selected = "true"
+            checked="true"
         {% endif %}
     {% endfor %}
 {% endmacro %}

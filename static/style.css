@@ -112,7 +112,7 @@ margin-right: 10px;
 }
 
 /* Clearfix hack */ 
-.cancel:after, .delete:after {
+.cancel:after, .delete:after, .disclosure:after {
 content: ".";
 display: block;
 height: 0;
@@ -133,7 +133,7 @@ float: left;
 float: right;
 }
 
-.edit, .delete, .update, .cancel {
+.edit, .delete, .update, .cancel, .select-all, .select-none {
 font-size: .75em;
 }
 
@@ -173,7 +173,44 @@ background-color: green;
 padding: 5px;    
 }
 
+.disclosure-row, .mitigation-row, .impact-row {
+margin-bottom: 20px;
+padding: 10px;
+background-color: white;
+}
+
+.from-actor-data, .disclosure, .mitigation {
+float: left;
+width: 290px;
+}
+
+.to-actor, .alternatives, .actor-goal-effects {
+float: left;
+width: 290px;
+}
+
+.effects {
+float: left;
+list-style: none;
+}
+
+.effect input {
+margin-bottom: 5px;
+}
+
 .choice {
 display: block;
 text-align: left;
+}
+
+.variable-text {
+color: green;
+}
+
+.actor-goal .variable-text {
+color: green;
+}
+
+.clear {
+clear: both;
 }

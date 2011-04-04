@@ -14,9 +14,9 @@
         $('.flagged').live('change', function () {
             var flagged = $(this).attr('checked');
             var app_id = $(this).parents('.disclosures').attr('id').split('-')[1];
-            var cells = $(this).parents('#actor-data').children('td');
-            var fromActorId = $(cells[0]).attr('id').split('-')[1];
-            var datumId = $(cells[1]).attr('id').split('-')[1];
+            var data = $(this).parents('.disclosure-row').children('.from-actor-data').children('span');
+            var fromActorId = $(data[0]).attr('id').split('-')[1];
+            var datumId = $(data[1]).attr('id').split('-')[1];
             var toActorId = $(this).siblings('span').attr('id').split('-')[1];
             $.post('/disclosure', 
                 {app_id: app_id, from_actor_id: fromActorId, datum_id: datumId, to_actor_id: toActorId, flagged: flagged},
@@ -28,14 +28,16 @@
     });
     </script>
 
-    <table class="disclosures" id="app-{{ app_id }}">
-        <tr><th>From Actor</th><th>Data</th><th>To Actor</th></tr>
+    <div class="disclosures" id="app-{{ app_id }}">
+
     {% for from_actor in actors %}
         {% for datum in from_actor.data %}
-        <tr id="actor-data">
-            <td id="fromactor-{{from_actor.id}}">{{from_actor.name}}</td>
-            <td id="datumid-{{datum.id}}">{{datum.name}}</td>
-            <td>
+        <div class="disclosure-row">
+            <div class="from-actor-data">
+                <span id="fromactor-{{from_actor.id}}" class="variable-text">{{from_actor.name}}</span> disclose their 
+                <span id="datumid-{{datum.id}}" class="variable-text">{{datum.name}}</span> to:
+            </div>
+            <div class="to-actor">
                 {% for to_actor in actors %}
                     {% if from_actor.name != to_actor.name %}
                     <div class="choice">
@@ -44,11 +46,13 @@
                     </div>
                     {% endif %}
                 {% endfor %}
-            </td>
-            {% endfor %}
-        </tr>
+                <a href="#" class="select-all">Select All</a> | <a href="#" class="select-none">Select None</a>
+            </div>
+            <div class="clear"></div>
+        </div>
         {% endfor %}
-    </table>
+    {% endfor %}
+    </div>
     <div id="nav">
         <a class="prev" href="/goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
         <a class="next" href="/mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
