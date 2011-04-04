@@ -1,83 +1,131 @@
 {% extends "layout.html" %}
 {% block body %}
     <script type="text/javascript">
+    function modifyImpact(app_id, mitigation_id, goal_id, effect, verb) {
+        $.post('/impact', 
+            {app_id:app_id, mitigation_id: mitigation_id, goal_id: goal_id, effect: effect, verb: verb},
+            function(data) {
+                modifyImpactResult(data);
+            }
+        ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+    }
+    
     function modifyImpactResult(result) {
         if (result['success']) {
-
+            var rowClass = '#mitigation-' +  result['mitigation_id'];
+            row =  $(rowClass);
+            var listClass = '.' + result['effect'] + 'ed-goals';
+            list = $(row).find(listClass);
+            if (result['verb'] == 'create') {
+                $(list).find('ul').append(getImpactHtml(result['goal_name'], result['goal_id']));
+            } else {
+                $(list).find('.effect-goal-' + result['goal_id']).fadeOut();
+            }
         } else {
             $('.error').html(result['message']);
         }
     }
     
+    function getImpactHtml(goal_name, goal_id) {
+        return '<li class="effect-goal-' + goal_id + ' effect-goal"><div class="remove">&nbsp;</div>' + goal_name + '</li>';
+    }
+        
     $(document).ready(function () {
         $('#impacts').addClass('selected');
         
-        $('.effects').each(function() {
-            var chosen = false;
-            $(this).find('.effect input').each(function () {
-               if ($(this).attr('checked')) {
-                   chosen = true;
-               }
-            });
-            if (!chosen) {
-                $(this).find('.neutral').attr('checked', 'true');
+        $(".goal").draggable({
+            opacity: 0.8,
+            helper: function () { return $(this).clone().appendTo('body').show(); }
+        });
+        
+        $('.supported-goals, .harmed-goals').droppable({
+            hoverClass: 'ui-state-active',
+            drop: function( event, ui ) {
+                var goal_id = '';
+                $.each(ui.draggable.attr('class').split(' '), function() {
+                    if (this.indexOf('goal-') != -1) {
+                        goal_id = this.split('-')[1];
+                    }
+                });
+                var app_id = $(this).parents('.impacts').attr('id').split('-')[1];
+                var mitigation_id = $(this).parents('.impact-row').attr('id').split('-')[1];
+                effect = 'harm';
+                if ($(this).is('.supported-goals')) {
+                    effect = 'support';
+                } 
+                modifyImpact(app_id, mitigation_id, goal_id, effect, 'create');
+                return false;
             }
         });
         
-        $('.effect input').live('change', function () {
+        $('.remove').live('click', function() {
+            var goal_id = '';
+            $.each($(this).parent().attr('class').split(' '), function() {
+                if (this.indexOf('effect-goal-') != -1) {
+                    goal_id = this.split('-')[2];
+                }
+            });
             var app_id = $(this).parents('.impacts').attr('id').split('-')[1];
             var mitigation_id = $(this).parents('.impact-row').attr('id').split('-')[1];
-            var goal_id = $(this).parents('.effects').siblings('.mitigation').attr('id').split('-')[1];
-            var effect = $(this).val();
-            
-            $.post('/impact', 
-                {app_id:app_id, mitigation_id: mitigation_id, goal_id: goal_id, effect: effect},
-                function(data) {
-                    modifyImpactResult(data);
-                }
-            ).error(function(xhr, ajaxOptions, thrownError) { error(thrownError) } );
+            effect = 'harm';
+            if ($(this).parents('.supported-goals')) {
+                effect = 'support';
+            }
+            modifyImpact(app_id, mitigation_id, goal_id, effect, 'delete');
+            return false;
         });
     });
     </script>
-
-    <div class="impacts" id="app-{{app_id}}">
-        {% for mitigation in mitigations %}
-            <div class="impact-row" id="mitigation-{{mitigation.id}}">
-                    <div class="mitigation">
-                        When <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
-                        discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
-                        to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>, and the design alternative is
-                        <span class="variable-text">{{mitigation.category}}</span>,
-                    </div>
-                    {% for actor in actors %}
-                        {% for goal in actor.goals %}    
-                    <form class="effects-form" id="goal-{{goal.id}}">
-                        <div class="actor-goal">
-                            ...<span class="variable-text">{{actor.name}}</span> goal of <span class="variable-text">{{goal.name}}</span> is:
-                        </div>
-                        <ul class="effects">
-                            <li class="effect"><input type="radio" name="effects" class="support" value="support" {{checked(mitigation.id, goal.id, 'support')}}/><label>Supported</label></li>
-                            <li class="effect"><input type="radio" name="effects" class="neutral" value="neutral" {{checked(mitigation.id, goal.id, 'neutral')}})}}/><label>Unaffected</label></li>
-                            <li class="effect"><input type="radio" name="effects" class="harm" value="harm"  {{checked(mitigation.id, goal.id, 'harm')}}/><label>Harmed</label></li>
-                        </ul>
-                    </form>
-                        {% endfor %}
-                    {% endfor %}
-                    <div class="clear"></div>
-                </div>
+    
+    
+    <div class="actor-goals">
+        {% for actor in actors %}
+        {{actor.name}}
+        <ul class="goals">
+        {% for goal in actor.goals %}    
+            <li class="goal goal-{{goal.id}}">{{goal.name}}</li>
+        {% endfor %}
+        </ul>
         {% endfor %}
     </div>
     
+    <div class="impacts" id="app-{{app_id}}">
+    {% for mitigation in mitigations %}
+        <div class="impact-row" id="mitigation-{{mitigation.id}}">
+            <div class="mitigation">
+                When <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
+                discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>, and the design alternative is
+                <span class="variable-text">{{mitigation.category}}</span>.
+            </div>
+            <div class="supported-and-harmed">
+                <div class="supported-goals">
+                    <p>Supported</p>
+                    <ul>
+                        {{ get_goals(mitigation.id, 'support')}}
+                    </ul>
+                </div>
+                <div class="harmed-goals">
+                    <p>Harmed</p>
+                    <ul>
+                        {{ get_goals(mitigation.id, 'harm')}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="clear"></div>
+    </div>
     <div id="nav">
         <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
         <a class="next" href="/results?app_id={{ app_id }}">Next (Results) &gt;</a>
     </div>
 {% endblock %}
 
-{% macro checked(mitigation_id, goal_id, effect) %}
+{% macro get_goals(mitigation_id, effect) %}
     {% for i in impacts %}
-        {% if i.mitigation_id == mitigation_id and i.goal_id == goal_id and i.effect == effect %}
-            checked="true"
+        {% if i.mitigation_id == mitigation_id and i.effect == effect %}
+            <li class="effect-goal-{{i.goal.id}} effect-goal"><div class="remove">&nbsp;</div>{{i.goal.name}}</li>
         {% endif %}
     {% endfor %}
 {% endmacro %}

@@ -163,15 +163,16 @@ def impact():
     mitigation_id = request.form['mitigation_id']
     goal_id = request.form['goal_id']
     effect = request.form['effect']
-    impact = Impact.query.filter_by(mitigation_id=mitigation_id,goal_id=goal_id).first()
-    if impact == None:
+    verb = request.form['verb']
+    if verb == 'create':
         impact = Impact(app_id, mitigation_id, goal_id, effect)
         db.session.add(impact)
-    else:
-        impact.effect = effect
+    elif verb == 'delete':
+        impact = Impact.query.filter_by(mitigation_id=mitigation_id,goal_id=goal_id).first()
+        db.session.delete(impact)
     db.session.commit()
     id = impact.id
-    return jsonify(id=id, success = True)
+    return jsonify(id=id, mitigation_id = impact.mitigation_id, goal_id = impact.goal_id, goal_name = impact.goal.name, effect = impact.effect, verb = verb, success = True)
 
 @app.route("/result")
 def result():

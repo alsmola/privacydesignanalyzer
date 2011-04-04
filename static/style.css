@@ -65,9 +65,12 @@ padding: 5px;
 background-color: green;
 }
 
+ul {
+list-style: none;
+}
+
 #sidebar {
 float: left;
-list-style: none;
 margin: 0 20px;
 width: 120px;
 }
@@ -91,7 +94,6 @@ width: 600px;
 
 #apps {
 margin-left: 30px;
-list-style: none;
 padding: 20px;
 }
 
@@ -137,10 +139,6 @@ float: right;
 font-size: .75em;
 }
 
-.list {
-list-style: none;
-}
-
 .list li {
 margin: 10px 0;
 }
@@ -179,22 +177,18 @@ padding: 10px;
 background-color: white;
 }
 
-.from-actor-data, .disclosure, .actor-goal {
+.from-actor-data, .disclosure, .impact-row  {
 float: left;
 width: 360px;
 }
 
-.to-actor, .alternatives, .effects {
+.to-actor, .alternatives {
 float: left;
 width: 220px;
 }
 
-.effects {
-list-style: none;
-}
-
-.effect input {
-margin-bottom: 5px;
+.impacts {
+float: left;
 }
 
 .choice {
@@ -207,16 +201,44 @@ color: green;
 text-transform: lowercase;
 }
 
-.actor-goal .variable-text {
-color: green;
+.actor-goals {
+float: right;
+padding: 10px;
+width: 180px;
+background-color: white;
+position: fixed;
+margin-left: 400px;
+height: 80%;
+overflow-y: scroll;
+}
+
+.goal {
+background-color: white;
+border: 1px solid #333;
+margin-bottom: 10px;
+padding: 5px;
+list-style: none;
+width: 160px;
+display: pointer;
+}
+
+.supported-goals, .harmed-goals {
+float: left;
+width: 173px;
+margin-top: 10px;
+border: 1px solid #333;
+}
+
+.harmed-goals {
+margin-left: 10px;
+}
+
+.supported-goals ul, .harmed-goals ul {
+min-height: 20px;
 }
 
 .clear {
 clear: both;
-}
-
-.result ul {
-list-style: none;
 }
 
 .result li {
@@ -226,4 +248,23 @@ margin-bottom: 10px;
 .result-mitigations {
 padding-top: 10px;
 padding-bottom: 10px;
+}
+
+.ui-state-active {
+background-color: green;
+}
+
+.effect-goal {
+border: 1px solid #888;
+margin: 5px;
+padding: 5px;
+}
+
+.remove {
+float: right;
+width: 16px;
+height: 16px;
+background-image: url('/static/delete.png');
+margin: 2px 0 0 0;
+cursor: pointer;
 }
