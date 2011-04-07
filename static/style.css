@@ -47,26 +47,46 @@ input, select { vertical-align: middle; }
 
 /* New Stuff */
 
+html, body {
+height: 100%;
+}
+
 body { 
 font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
-background: #eee; 
+color: #333;
+background: #d5e1ca; 
 }
 
 a {
-color: green;
+color: #333;
 }
+
+a:hover {
+color: #603b46;
+}
+
 
 #title {
 margin-bottom: 20px;
+font-size: 140%;
+background-color: #4b603a;
 }
 
 p, #title {
-padding: 5px;
-background-color: green;
+padding: 10px;
+background-color: #4b603a;
+color: #eee;
+font-weight: bold;
 }
 
 ul {
 list-style: none;
+}
+
+#content {
+float: left;
+margin: 0 auto;
+width: 600px;
 }
 
 #sidebar {
@@ -76,21 +96,20 @@ width: 120px;
 }
 
 #sidebar a {
+padding-left: 5px;
 text-decoration: none;
-color: black;
 }
 
 .selected {
 border: 1px solid transparent;
-background-color: green;
-color: white;
+background-color: #4b603a;
+font-weight: bold;
 }
 
-#content {
-float: left;
-margin: 0 auto;
-width: 600px;
+.selected a {
+color: #eee;
 }
+
 
 #apps {
 margin-left: 30px;
@@ -110,7 +129,13 @@ padding: 0 10px;
 float: left;
 background-color: white;
 padding: 0;
+font-weight: normal;
 margin-right: 10px;
+color: #333;
+}
+
+a .name {
+text-decoration: underline;
 }
 
 /* Clearfix hack */ 
@@ -156,30 +181,15 @@ overflow: hidden;
 margin: 10px 0;    
 }
 
-table {
-text-align: center;
-}
-
-td {
-border-bottom: 1px solid #888; 
-padding: 5px;
-background-color: white;
-}
-
-th {
-background-color: green;
-padding: 5px;    
-}
-
 .disclosure-row, .mitigation-row, .impact-row {
-margin-bottom: 20px;
+margin: 0 10px 20px 10px;
 padding: 10px;
 background-color: white;
 }
 
 .from-actor-data, .disclosure, .impact-row  {
 float: left;
-width: 360px;
+width: 340px;
 }
 
 .to-actor, .alternatives {
@@ -197,19 +207,34 @@ text-align: left;
 }
 
 .variable-text {
-color: green;
+color: #4b603a;
 text-transform: lowercase;
 }
 
 .actor-goals {
 float: right;
-padding: 10px;
-width: 180px;
-background-color: white;
+width: 208px;
 position: fixed;
 margin-left: 400px;
-height: 80%;
+height: 90%;
+}
+
+.actor-goals h2 {
+padding: 10px;
+font-weight: bold;
+background-color: #4b603a;
+color: #eee;
+}
+
+.actor-goals-content {
+padding: 10px;
+background-color: white;
 overflow-y: scroll;
+height: 80%;
+}
+
+.actor {
+font-weight: bold;    
 }
 
 .goal {
@@ -224,7 +249,7 @@ display: pointer;
 
 .supported-goals, .harmed-goals {
 float: left;
-width: 173px;
+width: 163px;
 margin-top: 10px;
 border: 1px solid #333;
 }
@@ -251,13 +276,13 @@ padding-bottom: 10px;
 }
 
 .ui-state-active {
-background-color: green;
+background-color: #4b603a;
 }
 
 .effect-goal {
 border: 1px solid #888;
 margin: 5px;
-padding: 5px;
+padding: 10px 5px 5px 5px;
 }
 
 .remove {
@@ -265,6 +290,6 @@ float: right;
 width: 16px;
 height: 16px;
 background-image: url('/static/delete.png');
-margin: 2px 0 0 0;
+margin: -8px -4px 0 0;
 cursor: pointer;
 }

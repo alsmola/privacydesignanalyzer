@@ -9,9 +9,13 @@ app = Flask(__name__)
 def start():
     return render_template('start.html', applications = Application.query.all())
     
+@app.route("/favicon.ico")
+def favicon():
+    return app.send_static_file("favicon.ico")
+
 @app.route("/application", methods = ['POST',])
 def application():
-    id = request.form['id']
+    id = int(request.form['id'])
     name = request.form['name']
     verb = request.form['verb']
     if verb == 'create':
@@ -31,13 +35,13 @@ def application():
 
 @app.route("/actors", methods=['GET',])
 def actors():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     return render_template('actors.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/actor', methods=['POST',])
 def actor():
-    id = request.form['id']
-    parent_id = request.form['parent_id']
+    id = int(request.form['id'])
+    parent_id = int(request.form['parent_id'])
     name = request.form['name']
     verb = request.form['verb']
     if verb == 'create':
@@ -57,14 +61,14 @@ def actor():
     
 @app.route("/goals")
 def goals():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     actors = Actor.query.filter_by(app_id=app_id).all()
     return render_template('goals.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/goal', methods=['POST',])
 def goal():
-    id = request.form['id']
-    parent_id = request.form['parent_id']
+    id = int(request.form['id'])
+    parent_id = int(request.form['parent_id'])
     name = request.form['name']
     verb = request.form['verb']
     if verb == 'create':
@@ -85,13 +89,13 @@ def goal():
 
 @app.route("/data")
 def data():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
 
 @app.route('/datum', methods=['POST',])
 def datum():
-    id = request.form['id']
-    parent_id = request.form['parent_id']
+    id = int(request.form['id'])
+    parent_id = int(request.form['parent_id'])
     name = request.form['name']
     verb = request.form['verb']
     if verb == 'create':
@@ -111,15 +115,15 @@ def datum():
 
 @app.route("/disclosures")
 def disclosures():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/disclosure", methods=['POST',])
 def disclosure():
-    app_id = request.form['app_id']
-    from_actor_id = request.form['from_actor_id']
-    datum_id = request.form['datum_id']
-    to_actor_id = request.form['to_actor_id']
+    app_id = int(request.form['app_id'])
+    from_actor_id = int(request.form['from_actor_id'])
+    datum_id = int(request.form['datum_id'])
+    to_actor_id = int(request.form['to_actor_id'])
     flagged = request.form['flagged']
     if flagged == 'true':
         disclosure = Disclosure(app_id, from_actor_id, datum_id, to_actor_id)
@@ -133,13 +137,13 @@ def disclosure():
 
 @app.route("/mitigations")
 def mitigations():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
 
 @app.route("/mitigation", methods=['POST',])
 def mitigation():
-    app_id = request.form['app_id']
-    disclosure_id = request.form['disclosure_id']
+    app_id = int(request.form['app_id'])
+    disclosure_id = int(request.form['disclosure_id'])
     category = request.form['category']
     flagged = request.form['flagged']
     if flagged == 'true':
@@ -154,14 +158,14 @@ def mitigation():
         
 @app.route("/impacts")
 def impacts():
-    app_id = request.args['app_id']    
+    app_id = int(request.args['app_id'])
     return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
 @app.route("/impact", methods=['POST',])
 def impact():   
-    app_id = request.form['app_id']
-    mitigation_id = request.form['mitigation_id']
-    goal_id = request.form['goal_id']
+    app_id = int(request.form['app_id'])
+    mitigation_id = int(request.form['mitigation_id'])
+    goal_id = int(request.form['goal_id'])
     effect = request.form['effect']
     verb = request.form['verb']
     if verb == 'create':
@@ -176,7 +180,7 @@ def impact():
 
 @app.route("/result")
 def result():
-    app_id = request.args['app_id']
+    app_id = int(request.args['app_id'])
     return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id))
 
 @app.route("/reset")

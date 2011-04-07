@@ -79,16 +79,19 @@
     
     
     <div class="actor-goals">
-        {% for actor in actors %}
-        {{actor.name}}
-        <ul class="goals">
-        {% for goal in actor.goals %}    
-            <li class="goal goal-{{goal.id}}">{{goal.name}}</li>
-        {% endfor %}
-        </ul>
-        {% endfor %}
+        <h2>Goals</h2>
+        <div class="actor-goals-content">
+            {% for actor in actors %}
+            <span class="actor">{{actor.name}}</span>
+            <ul class="goals">
+            {% for goal in actor.goals %}    
+                <li class="goal goal-{{goal.id}}">{{goal.name}}</li>
+            {% endfor %}
+            </ul>
+            {% endfor %}
+        </div>
     </div>
-    
+
     <div class="impacts" id="app-{{app_id}}">
     {% for mitigation in mitigations %}
         <div class="impact-row" id="mitigation-{{mitigation.id}}">
