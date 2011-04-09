@@ -40,6 +40,7 @@ function getItemHtml(name, type, id) {
             <input class="update-name" value="' + name + '"/>\
             <a class="update" href="#">Update</a>\
             <a class="cancel" href="#">Cancel</a>\
+            <div class="clear"></div>\
         </form>\
         <div class="edit-delete">'
     if (type == 'application') {
@@ -50,6 +51,7 @@ function getItemHtml(name, type, id) {
     html += '\
             <a class="edit" href="#">Edit</a>\
             <a class="delete" href="#">Delete</a>\
+            <div class="clear"></div>\
         </div>\
     </li>'
     return html;

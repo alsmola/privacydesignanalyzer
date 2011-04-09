@@ -54,7 +54,9 @@ height: 100%;
 body { 
 font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 color: #333;
-background: #d5e1ca; 
+background: #d5e1ca;
+background-image: url('/static/tile.png');
+background-repeat: repeat-x repeat-y;
 }
 
 a {
@@ -64,7 +66,6 @@ color: #333;
 a:hover {
 color: #603b46;
 }
-
 
 #title {
 margin-bottom: 20px;
@@ -87,6 +88,7 @@ list-style: none;
 float: left;
 margin: 0 auto;
 width: 600px;
+height: 100%;
 }
 
 #sidebar {
@@ -110,7 +112,6 @@ font-weight: bold;
 color: #eee;
 }
 
-
 #apps {
 margin-left: 30px;
 padding: 20px;
@@ -132,19 +133,11 @@ padding: 0;
 font-weight: normal;
 margin-right: 10px;
 color: #333;
+max-width: 80%;
 }
 
 a .name {
 text-decoration: underline;
-}
-
-/* Clearfix hack */ 
-.cancel:after, .delete:after, .disclosure:after {
-content: ".";
-display: block;
-height: 0;
-clear: both;
-visibility: hidden;
 }
 
 .error {
@@ -182,14 +175,15 @@ margin: 10px 0;
 }
 
 .disclosure-row, .mitigation-row, .impact-row {
-margin: 0 10px 20px 10px;
+margin-bottom: 20px;
 padding: 10px;
-background-color: white;
+background-color: white
 }
 
 .from-actor-data, .disclosure, .impact-row  {
 float: left;
-width: 340px;
+width: 330px;
+margin-right: 10px;
 }
 
 .to-actor, .alternatives {
@@ -215,8 +209,8 @@ text-transform: lowercase;
 float: right;
 width: 208px;
 position: fixed;
-margin-left: 400px;
-height: 90%;
+margin-left: 370px;
+height: 100%;
 }
 
 .actor-goals h2 {
@@ -249,7 +243,7 @@ display: pointer;
 
 .supported-goals, .harmed-goals {
 float: left;
-width: 163px;
+width: 158px;
 margin-top: 10px;
 border: 1px solid #333;
 }
