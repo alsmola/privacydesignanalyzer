@@ -8,7 +8,7 @@
     
     {% for actor in actors %}
     <div class="question">
-        <p>What are the pieces of data for <span class="actor-name">{{ actor.name }}</span>?</p>    
+        <p class="caption">What are the pieces of data for <span class="actor-name">{{ actor.name }}</span>?</p>    
         <div class="response">
             <ul id="actor-{{ actor.id }}" class="list">
                 <script type="text/javascript">
@@ -26,9 +26,13 @@
         </div>
     </div>
     {% endfor %}
-    <div id="nav">
-        <a class="prev" href="/actors?app_id={{ app_id }}">&lt; Prev (Goals)</a>
-        <a class="next" href="/data?app_id={{ app_id }}">Next (Disclosures) &gt;</a>
-    </div>
-</div>
+{% endblock %}
+
+{% block help %}
+<p>Each of these actors either gives or receives data from the system. This includes obvious information like posting and reading messages, but also includes non-obvious information like browser fingerprints, IP addresses and web activity. Some actors may not necessarily have the same privacy concerns in the analysis because of the relative power differentials, and so the data they disclose may be skipped even if the actor is not – not many people are worried about the privacy of data disclosed by the Google search engine spidering robot, for instance, but they may be concerned about the privacy of the data the it pulls from the web.</p>
+{% endblock %}
+
+{% block nav %}
+    <a class="prev" href="/actors?app_id={{ app_id }}">&lt; Prev (Goals)</a>
+    <a class="next" href="/data?app_id={{ app_id }}">Next (Disclosures) &gt;</a>
 {% endblock %}

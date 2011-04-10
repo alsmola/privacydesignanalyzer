@@ -9,11 +9,12 @@
         $('#disclosures').hide();
         $('#mitigations').hide();
         $('#impacts').hide();
-        $('#result').hide();        
+        $('#result').hide();
+        $('#help').hide();
     });
 </script>
     <div class="question">
-        <p id="welcome">Welcome to the Privacy Design Analysis Toolkit. Select an application.</p>
+        <p class="caption" id="welcome">Welcome to the Privacy Design Analysis Toolkit. Select an application.</p>
         <div class="response">
             <ul id="applications" class="list">
                 <script type="text/javascript">
@@ -30,4 +31,12 @@
             <p class="error"></p>
         </div>
     </div>
+{% endblock %}
+
+{% block help %}
+
+{% endblock %}
+
+{% block nav %}
+
 {% endblock %}

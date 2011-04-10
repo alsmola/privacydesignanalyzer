@@ -103,13 +103,13 @@
             </div>
             <div class="supported-and-harmed">
                 <div class="supported-goals">
-                    <p>Supported</p>
+                    <p class="caption">Supported</p>
                     <ul>
                         {{ get_goals(mitigation.id, 'support')}}
                     </ul>
                 </div>
                 <div class="harmed-goals">
-                    <p>Harmed</p>
+                    <p class="caption">Harmed</p>
                     <ul>
                         {{ get_goals(mitigation.id, 'harm')}}
                     </ul>
@@ -119,11 +119,18 @@
     {% endfor %}
     <div class="clear"></div>
     </div>
-    <div id="nav">
-        <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
-        <a class="next" href="/results?app_id={{ app_id }}">Next (Results) &gt;</a>
-    </div>
 {% endblock %}
+
+{% block help %}
+<p>An impact is the effect that a mitigation has on a goal. Mitigations often involve tradeoffs. A long privacy notice before each action may improve user privacy but harm user experience. Anonymization may help shield data but could hinder analysis in the event of a security breach. Understanding which privacy design alternatives support or harm goals helps analysts decide which are the best choice.</p>
+{% endblock %}
+
+{% block nav %}
+    <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
+    <a class="next" href="/results?app_id={{ app_id }}">Next (Results) &gt;</a>
+{% endblock %}
+
+
 
 {% macro get_goals(mitigation_id, effect) %}
     {% for i in impacts %}

@@ -45,10 +45,16 @@
             </div>
         {% endfor %}
     </div>
-    <div id="nav">
-        <a class="prev" href="/disclosures?app_id={{ app_id }}">&lt; Prev (Disclosures)</a>
-        <a class="next" href="/impacts?app_id={{ app_id }}">Next (Impacts) &gt;</a>
-    </div>
+
+{% endblock %}
+
+{% block help %}
+<p>A mitigation is a design alternative that reduces the privacy risk of a disclosure. For instance, the user could be given notice that the disclosure occurs, or they could have the choice to opt-in or opt-out. The data could be anonymized before it is disclosed, or it could be aggregated by combining individual records. Not all of these alternatives may be possible or ideal for each disclosure, but it helps surface design ideas that could help improve privacy.</p>
+{% endblock %}
+
+{% block nav %}
+    <a class="prev" href="/disclosures?app_id={{ app_id }}">&lt; Prev (Disclosures)</a>
+    <a class="next" href="/impacts?app_id={{ app_id }}">Next (Impacts) &gt;</a>
 {% endblock %}
 
 {% macro checked(disclosure_id, category) %}

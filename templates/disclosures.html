@@ -52,13 +52,18 @@
         {% endfor %}
     {% endfor %}
     </div>
-    <div id="nav">
-        <a class="prev" href="/goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
-        <a class="next" href="/mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
-    </div>
+
 
 {% endblock %}
 
+{% block help %}
+<p>Disclosures are pieces of data disclosed from one actor to another actor. By inspecting all possible combinations of the actors and pieces of data, an analyst can identify which disclosures occur and may be problematic from a privacy standpoint. Some disclosures are necessary, expected, or otherwise not important from a privacy standpoint, but simply looking at the set of possible disclosures exhaustively helps spot privacy concerns that may be otherwise overlooked.</p>
+{% endblock %}
+
+{% block nav %}
+    <a class="prev" href="/goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
+    <a class="next" href="/mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
+{% endblock %}
 
 {% macro checked(from_actor_id, datum_id, to_actor_id) %}
     {% for d in disclosures %}
