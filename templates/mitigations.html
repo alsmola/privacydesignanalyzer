@@ -29,9 +29,9 @@
     <div class="mitigations" id="app-{{app_id}}">
         {% for disclosure in disclosures %}
             <div class="mitigation-row" id="disclosure-{{disclosure.id}}">
-                <div class="disclosure">
+                <p class="disclosure caption">
                     When <span class="variable-text">{{disclosure.from_actor.name}}</span> disclose <span class="variable-text">{{disclosure.datum.name}}</span> to <span class="variable-text">{{disclosure.to_actor.name}}</span>, the following alternatives are possible:   
-                </div>
+                </p>
                 <div class="alternatives">
                 {% for category in categories %}
                     <div class="choice">
@@ -49,7 +49,7 @@
 {% endblock %}
 
 {% block help %}
-<p>A mitigation is a design alternative that reduces the privacy risk of a disclosure. For instance, the user could be given notice that the disclosure occurs, or they could have the choice to opt-in or opt-out. The data could be anonymized before it is disclosed, or it could be aggregated by combining individual records. Not all of these alternatives may be possible or ideal for each disclosure, but it helps surface design ideas that could help improve privacy.</p>
+<p><span class="keyterm">Mitigations</span> are design alternative that reduces the privacy risk of a disclosure. Select the mitigations that may potentially improve the privacy issues associated with the disclosure. There may be several mitigations for each disclosure, and some mitigations may be used together (e.g. notice and choice).</p>
 {% endblock %}
 
 {% block nav %}

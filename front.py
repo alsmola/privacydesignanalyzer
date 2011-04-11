@@ -5,15 +5,15 @@ import main
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route('/')
 def start():
     return render_template('start.html', applications = Application.query.all())
     
-@app.route("/favicon.ico")
+@app.route('/favicon.ico')
 def favicon():
-    return app.send_static_file("favicon.ico")
+    return app.send_static_file('favicon.ico')
 
-@app.route("/application", methods = ['POST',])
+@app.route('/application', methods = ['POST',])
 def application():
     id = int(request.form['id'])
     name = request.form['name']
@@ -33,7 +33,7 @@ def application():
     id = application.id
     return jsonify(id=id, name=name, verb=verb, parent_id=-1, success = True, type = 'application', parent_type = 'none')
 
-@app.route("/actors", methods=['GET',])
+@app.route('/actors', methods=['GET',])
 def actors():
     app_id = int(request.args['app_id'])
     return render_template('actors.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
@@ -59,7 +59,7 @@ def actor():
     id = actor.id
     return jsonify(id=id, name=name, verb=verb, parent_id=parent_id, success = True, type = 'actor', parent_type = 'app')
     
-@app.route("/goals")
+@app.route('/goals')
 def goals():
     app_id = int(request.args['app_id'])
     actors = Actor.query.filter_by(app_id=app_id).all()
@@ -87,7 +87,7 @@ def goal():
     return jsonify(id=id, name=name, verb=verb, parent_id=parent_id, success = True, type = 'goal', parent_type = 'actor')
 
 
-@app.route("/data")
+@app.route('/data')
 def data():
     app_id = int(request.args['app_id'])
     return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
@@ -113,12 +113,12 @@ def datum():
     id = datum.id
     return jsonify(id=id, name=name, verb=verb, parent_id=parent_id, success = True, type = 'datum', parent_type = 'actor')
 
-@app.route("/disclosures")
+@app.route('/disclosures')
 def disclosures():
     app_id = int(request.args['app_id'])
     return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
-@app.route("/disclosure", methods=['POST',])
+@app.route('/disclosure', methods=['POST',])
 def disclosure():
     app_id = int(request.form['app_id'])
     from_actor_id = int(request.form['from_actor_id'])
@@ -135,12 +135,12 @@ def disclosure():
     id = disclosure.id
     return jsonify(id=id, success = True)
 
-@app.route("/mitigations")
+@app.route('/mitigations')
 def mitigations():
     app_id = int(request.args['app_id'])
     return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
 
-@app.route("/mitigation", methods=['POST',])
+@app.route('/mitigation', methods=['POST',])
 def mitigation():
     app_id = int(request.form['app_id'])
     disclosure_id = int(request.form['disclosure_id'])
@@ -156,12 +156,12 @@ def mitigation():
     id = mitigation.id
     return jsonify(id=id, success = True)
         
-@app.route("/impacts")
+@app.route('/impacts')
 def impacts():
     app_id = int(request.args['app_id'])
     return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id)
 
-@app.route("/impact", methods=['POST',])
+@app.route('/impact', methods=['POST',])
 def impact():   
     app_id = int(request.form['app_id'])
     mitigation_id = int(request.form['mitigation_id'])
@@ -178,16 +178,16 @@ def impact():
     id = impact.id
     return jsonify(id=id, mitigation_id = impact.mitigation_id, goal_id = impact.goal_id, goal_name = impact.goal.name, effect = impact.effect, verb = verb, success = True)
 
-@app.route("/result")
+@app.route('/result')
 def result():
     app_id = int(request.args['app_id'])
     return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id))
 
-@app.route("/reset")
+@app.route('/reset')
 def reset():   
     db.drop_all()
     db.create_all()
-    return "Success"
+    return 'Success: reset'
 
 @app.route("/test")
 def test():
@@ -213,10 +213,10 @@ def test():
             for datum in actorData[actor.name]:
                 db.session.add(Datum(datum, actor.id))
         db.session.commit()
-    return "Success"
-  
+    return 'Success: test'  
+
 app.secret_key = ''
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.debug = True
     app.run()

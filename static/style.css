@@ -90,7 +90,7 @@ padding: 10px;
 background-color: white;
 position: fixed;
 left: 780px;
-font-size: .9em;
+font-size: .9em;    
 }
 
 #nav {
@@ -104,8 +104,15 @@ font-size: 140%;
 background-color: #4b603a;
 }
 
-.caption, #title {
-padding: 10px;
+#title {
+padding: 5px 10px;
+background-color: #4b603a;
+color: #eee;
+font-weight: bold;
+}
+
+.caption {
+padding: 5px 10px;
 background-color: #4b603a;
 color: #eee;
 font-weight: bold;
@@ -126,9 +133,14 @@ font-weight: bold;
 color: #eee;
 }
 
+
 #help ul {
 list-style-type: circle;
 margin-left: 20px;
+}
+
+.keyterm {
+font-size: 1.4em;
 }
 
 #apps {
@@ -166,10 +178,12 @@ color: red;
 
 .prev {
 float: left;
+margin-left: 10px;
 }
 
 .next {
 float: right;
+margin-right: 10px;
 }
 
 .edit, .delete, .update, .cancel, .add, .select-all, .select-none, #nav {
@@ -190,19 +204,20 @@ margin: 10px 0;
 
 .disclosure-row, .mitigation-row, .impact-row {
 margin-bottom: 20px;
-padding: 10px;
-background-color: white
+background-color: white;
+}
+
+
+.impact-row {
+width: 350px;
 }
 
 .from-actor-data, .disclosure, .impact-row  {
-float: left;
-width: 330px;
-margin-right: 10px;
+
 }
 
 .to-actor, .alternatives {
-float: left;
-width: 220px;
+padding: 10px;
 }
 
 .impacts {
@@ -215,6 +230,11 @@ text-align: left;
 }
 
 .variable-text {
+color: #e1aebd;
+text-transform: lowercase;
+}
+
+.variable-text-inverse {
 color: #4b603a;
 text-transform: lowercase;
 }
@@ -225,13 +245,6 @@ width: 228px;
 position: fixed;
 margin-left: 370px;
 height: 100%;
-}
-
-.actor-goals h2 {
-padding: 10px;
-font-weight: bold;
-background-color: #4b603a;
-color: #eee;
 }
 
 .actor-goals-content {
@@ -247,12 +260,22 @@ font-weight: bold;
 
 .goal {
 background-color: white;
-border: 1px solid #333;
+border: 1px solid #888;
 margin-bottom: 10px;
 padding: 5px;
 list-style: none;
 width: 180px;
 display: pointer;
+}
+
+.supported-and-harmed {
+padding: 10px;
+}
+
+.supported-and-harmed p {
+padding: 5px;
+font-size: 1.1em;
+font-weight: bolder;
 }
 
 .supported-goals, .harmed-goals {
@@ -300,4 +323,21 @@ height: 16px;
 background-image: url('/static/delete.png');
 margin: -8px -4px 0 0;
 cursor: pointer;
+}
+
+.question, .disclosure-row, .mitigation-row, .impact-row, #help, #sidebar li {
+border-radius: 3px;
+}
+
+.caption {
+-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+-moz-border-radius-topleft: 5px;
+-moz-border-radius-topright: 5px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+}
+
+ {
+
 }

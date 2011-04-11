@@ -12,10 +12,10 @@
             <ul>
                 {% for mitigation in support %}
                 <li>
-                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
-                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
-                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
-                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                    Use <span class="variable-text-inverse">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text-inverse">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text-inverse">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text-inverse">{{mitigation.disclosure.to_actor.name}}</span>
                 </li>
                 {% endfor %}
             </ul>
@@ -28,10 +28,10 @@
             <ul>
                 {% for mitigation in neutral %}
                 <li>
-                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
-                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
-                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
-                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                    Use <span class="variable-text-inverse">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text-inverse">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text-inverse">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text-inverse">{{mitigation.disclosure.to_actor.name}}</span>
                 </li>
                 {% endfor %}
             </ul>
@@ -44,10 +44,10 @@
             <ul>
                 {% for mitigation in harm %}
                 <li>
-                    Use <span class="variable-text">{{mitigation.category}}</span> to protect when 
-                    <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
-                    discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
-                    to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>
+                    Use <span class="variable-text-inverse">{{mitigation.category}}</span> to protect when 
+                    <span class="variable-text-inverse">{{mitigation.disclosure.from_actor.name}}</span>
+                    discloses <span class="variable-text-inverse">{{mitigation.disclosure.datum.name}}</span>
+                    to <span class="variable-text-inverse">{{mitigation.disclosure.to_actor.name}}</span>
                 </li>
                 {% endfor %}
             </ul>

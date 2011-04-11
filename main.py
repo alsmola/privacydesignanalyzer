@@ -114,5 +114,5 @@ def get_mitigations(effect, app_id):
     return mitigations
             
         
-categories = ['Anonymity', 'Pseudonymity', 'Aggregation', 'Limited Audience', 'Notice', 'Choice']
+categories = ['Don\'t disclose', 'Anonymize data', 'Allow pseudonyms', 'Aggregate data', 'Provide notice', 'Offer choice']
 effects = ['Support', 'Harm', 'No effect']

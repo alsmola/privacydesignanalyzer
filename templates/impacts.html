@@ -79,7 +79,7 @@
     
     
     <div class="actor-goals">
-        <h2>Goals</h2>
+        <p class="caption">Goals</p>
         <div class="actor-goals-content">
             {% for actor in actors %}
             <span class="actor">{{actor.name}}</span>
@@ -95,34 +95,35 @@
     <div class="impacts" id="app-{{app_id}}">
     {% for mitigation in mitigations %}
         <div class="impact-row" id="mitigation-{{mitigation.id}}">
-            <div class="mitigation">
+            <p class="mitigation caption">
                 When <span class="variable-text">{{mitigation.disclosure.from_actor.name}}</span>
-                discloses <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
+                disclose <span class="variable-text">{{mitigation.disclosure.datum.name}}</span>
                 to <span class="variable-text">{{mitigation.disclosure.to_actor.name}}</span>, and the design alternative is
-                <span class="variable-text">{{mitigation.category}}</span>.
-            </div>
+                <span class="variable-text">{{mitigation.category}}</span>, the following goals are supported/harmed:
+            </p>
             <div class="supported-and-harmed">
                 <div class="supported-goals">
-                    <p class="caption">Supported</p>
+                    <p>Supported</p>
                     <ul>
                         {{ get_goals(mitigation.id, 'support')}}
                     </ul>
                 </div>
                 <div class="harmed-goals">
-                    <p class="caption">Harmed</p>
+                    <p>Harmed</p>
                     <ul>
                         {{ get_goals(mitigation.id, 'harm')}}
                     </ul>
                 </div>
+                <div class="clear"></div>
             </div>
         </div>
     {% endfor %}
-    <div class="clear"></div>
     </div>
+    <div class="clear"></div>
 {% endblock %}
 
 {% block help %}
-<p>An impact is the effect that a mitigation has on a goal. Mitigations often involve tradeoffs. A long privacy notice before each action may improve user privacy but harm user experience. Anonymization may help shield data but could hinder analysis in the event of a security breach. Understanding which privacy design alternatives support or harm goals helps analysts decide which are the best choice.</p>
+<p><span class="keyterm">Impacts</span> are the effects that a mitigation has on a goal - either a goal is supported or it is harmed. Mitigations often involve tradeoffs. Understanding which mitigations support or harm goals helps highlight the best options.</p>
 {% endblock %}
 
 {% block nav %}

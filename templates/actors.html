@@ -6,7 +6,7 @@
         });
     </script>
     <div class="question">
-        <p class="caption">Who are the users of the application?</p>
+        <p class="caption">Who are the actors in the system?</p>
         <div class="response">
             <ul class="list" id="app-{{ app_id }}">
                 <script type="text/javascript">
@@ -29,18 +29,15 @@
 {% block help %}
 <p><span class="keyterm">Actors</span> are people who interact with data coming to or from the system. For example, this could include:<p>
 <ul>
-<li>“Special” types of users (friends, connections)</li>
-<li>Other authenticated users</li>
-<li>Unauthenticated users</li>
-<li>Developers</li>
-<li>System administrators</li>
-<li>Other stakeholders (management, etc)</li>
+<li>Users</li>
+<li>System owners</li>
 <li>Search engines</li>
 <li>3rd party advertisers</li>
 <li>Governments</li>
 <li>ISPs</li>
 <li>Local network users</li>
 </ul>
+<p>Try to group similar types of users to make the analysis easier. For example, there may be several types of actors who have access to data in the production system (system administrators, developers, testers, etc.), but they pose similar privacy concerns</p>
 {% endblock %}
 
 {% block nav %}

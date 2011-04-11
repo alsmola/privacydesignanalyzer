@@ -8,7 +8,7 @@
     
     {% for actor in actors %}
     <div class="question">
-        <p class="caption">What are the goals for <span class="actor-name">{{ actor.name }}</span>?</p>    
+        <p class="caption">What are the goals for <span class="actor-name variable-text">{{ actor.name }}</span>?</p>    
         <div class="response">
             <ul id="actor-{{ actor.id }}" class="list">
                 <script type="text/javascript">
@@ -29,7 +29,7 @@
 {% endblock %}
 
 {% block help %}
-<p>Each of the actors also has goals when they use the system. Sometimes these goals are concrete and related directly to the operation of the system, and other times they are more open-ended and tangential. At least one of these goals should be for an actor to maintain control over the privacy of their personal data.</p>
+<p><span class="keyterm">Goals</span> are motivations for actors when they use the system. Sometimes these goals are concrete and related directly to the operation of the system, and other times they are more open-ended and tangential. At least one of these goals should be for an actor to maintain control over the privacy of their personal data.</p>
 {% endblock %}
 
 {% block nav %}

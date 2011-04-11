@@ -33,11 +33,11 @@
     {% for from_actor in actors %}
         {% for datum in from_actor.data %}
         <div class="disclosure-row">
-            <div class="from-actor-data">
+            <p class="from-actor-data caption">
                 It may be considered a privacy violation if 
                 <span id="fromactor-{{from_actor.id}}" class="variable-text">{{from_actor.name}}</span> disclose their 
                 <span id="datumid-{{datum.id}}" class="variable-text">{{datum.name}}</span> to:
-            </div>
+            </p>
             <div class="to-actor">
                 {% for to_actor in actors %}
                 <div class="choice">
@@ -57,7 +57,7 @@
 {% endblock %}
 
 {% block help %}
-<p>Disclosures are pieces of data disclosed from one actor to another actor. By inspecting all possible combinations of the actors and pieces of data, an analyst can identify which disclosures occur and may be problematic from a privacy standpoint. Some disclosures are necessary, expected, or otherwise not important from a privacy standpoint, but simply looking at the set of possible disclosures exhaustively helps spot privacy concerns that may be otherwise overlooked.</p>
+<p><span class="keyterm">Disclosures</span> are pieces of data disclosed from one actor to another actor. Identify which disclosures occur and may be problematic from a privacy standpoint. Remember some disclosures are necessary, expected, or otherwise not important from a privacy standpoint.</p>
 {% endblock %}
 
 {% block nav %}
