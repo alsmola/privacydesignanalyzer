@@ -90,7 +90,8 @@ padding: 10px;
 background-color: white;
 position: fixed;
 left: 780px;
-font-size: .9em;    
+font-size: .9em;  
+border: 5px solid #4b603a;  
 }
 
 #nav {
