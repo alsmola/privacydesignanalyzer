@@ -208,13 +208,8 @@ margin-bottom: 20px;
 background-color: white;
 }
 
-
 .impact-row {
 width: 350px;
-}
-
-.from-actor-data, .disclosure, .impact-row  {
-
 }
 
 .to-actor, .alternatives {
@@ -231,7 +226,7 @@ text-align: left;
 }
 
 .variable-text {
-color: #e1aebd;
+color: #ffff66;
 text-transform: lowercase;
 }
 

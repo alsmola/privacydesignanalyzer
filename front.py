@@ -36,7 +36,7 @@ def application():
 @app.route('/actors', methods=['GET',])
 def actors():
     app_id = int(request.args['app_id'])
-    return render_template('actors.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
+    return render_template('actors.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/actor', methods=['POST',])
 def actor():
@@ -63,7 +63,7 @@ def actor():
 def goals():
     app_id = int(request.args['app_id'])
     actors = Actor.query.filter_by(app_id=app_id).all()
-    return render_template('goals.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
+    return render_template('goals.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/goal', methods=['POST',])
 def goal():
@@ -90,7 +90,7 @@ def goal():
 @app.route('/data')
 def data():
     app_id = int(request.args['app_id'])
-    return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id)
+    return render_template('data.html', actors = Actor.query.filter_by(app_id=app_id).all(), app_id=app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/datum', methods=['POST',])
 def datum():
@@ -116,7 +116,7 @@ def datum():
 @app.route('/disclosures')
 def disclosures():
     app_id = int(request.args['app_id'])
-    return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id)
+    return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/disclosure', methods=['POST',])
 def disclosure():
@@ -138,7 +138,7 @@ def disclosure():
 @app.route('/mitigations')
 def mitigations():
     app_id = int(request.args['app_id'])
-    return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id)
+    return render_template('mitigations.html', disclosures = Disclosure.query.filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), categories=main.categories, app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/mitigation', methods=['POST',])
 def mitigation():
@@ -159,7 +159,7 @@ def mitigation():
 @app.route('/impacts')
 def impacts():
     app_id = int(request.args['app_id'])
-    return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id)
+    return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/impact', methods=['POST',])
 def impact():   
@@ -181,7 +181,7 @@ def impact():
 @app.route('/result')
 def result():
     app_id = int(request.args['app_id'])
-    return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id))
+    return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id), app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/reset')
 def reset():   

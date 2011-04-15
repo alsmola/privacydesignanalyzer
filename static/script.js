@@ -61,8 +61,10 @@ function error(thrownError) {
     $('.error').html(thrownError);
 }
 
-$(document).ready(function () {    
-    
+$(document).ready(function () {   
+    if ($('#app-name').text() == '- ') {
+        $('#app-name').hide();
+    }
     $('.add-form').submit(function(event) {
         event.preventDefault();
         var name = $(this).children('.add-name').val();
