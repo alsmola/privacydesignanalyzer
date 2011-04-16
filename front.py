@@ -183,6 +183,12 @@ def result():
     app_id = int(request.args['app_id'])
     return render_template('result.html', app_id=app_id, support = main.get_mitigations('support', app_id), neutral = main.get_mitigations('neutral', app_id), harm = main.get_mitigations('harm', app_id), app_name = Application.query.filter_by(id=app_id).first().name)
 
+@app.route('/export')
+def export():
+    app_id = int(request.args['app_id'])
+    format = request.args['format']
+    return jsonify(actors = main.get_actors(app_id), data=main.get_data(app_id), goals=main.get_goals(app_id), disclosures=main.get_disclosures(app_id))
+
 @app.route('/reset')
 def reset():   
     db.drop_all()

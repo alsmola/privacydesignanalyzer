@@ -105,7 +105,48 @@ def get_mitigations(effect, app_id):
         elif (support == harm and effect == 'neutral'):
             mitigations.append(m)
     return mitigations
-            
+
+def get_actors(app_id):
+    actors = []
+    for a in Actor.query.filter(Actor.app_id == app_id).all():
+        actors.append(a.name)
+    return actors
+
+def get_data(app_id):
+    data = {}
+    for a in Actor.query.filter(Actor.app_id == app_id).all():
+        actor_data = []
+        for d in a.data:
+            actor_data.append(d.name)
+        data[a.name] = actor_data
+    return data
         
+def get_goals(app_id):
+    goals = {}
+    for a in Actor.query.filter(Actor.app_id == app_id).all():
+        actor_goals = []
+        for g in a.goals:
+            actor_goals.append(g.name)
+        goals[a.name] = actor_goals
+    return goals      
+
+def get_disclosures(app_id):
+    disclosures = []
+    for d in Disclosure.query.filter(Disclosure.app_id == app_id).all():
+        mitigations = {}
+        for m in Mitigation.query.filter(Mitigation.disclosure_id == d.id).all():
+            support_impacts = []
+            for i in Impact.query.filter(Impact.mitigation_id == m.id).filter('effect == "support"').all():
+                support_impacts.append(i.goal.name)
+            neutral_impacts = []
+            for i in Impact.query.filter(Impact.mitigation_id == m.id).filter('effect == "neutral"').all():
+                neutral_impacts.append(i.goal.name)
+            harm_impacts = []
+            for i in Impact.query.filter(Impact.mitigation_id == m.id).filter('effect == "harm"').all():
+                harm_impacts.append(i.goal.name)
+            mitigations[m.category] = {'supported' : support_impacts, 'neutral' : neutral_impacts, 'harm': harm_impacts}
+    disclosures.append({'from_actor' : d.from_actor.name, 'data': d.datum.name, 'to_actor': d.to_actor.name, 'mitigations': mitigations})
+    return disclosures
+
 categories = ['Don\'t disclose', 'Anonymize data', 'Allow pseudonyms', 'Aggregate data', 'Provide notice', 'Offer choice']
 effects = ['Support', 'Harm', 'No effect']
