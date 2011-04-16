@@ -221,6 +221,7 @@ def test():
         db.session.commit()
     return 'Success: test'  
 
+
 app.secret_key = ''
 
 if __name__ == '__main__':

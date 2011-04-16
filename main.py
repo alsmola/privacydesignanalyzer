@@ -95,9 +95,9 @@ class Impact(db.Model):
         
 def get_mitigations(effect, app_id):
     mitigations = []
-    for m in Mitigation.query.all():
-        support = Impact.query.filter('Impact.app_id == app_id').filter(Impact.mitigation_id ==  m.id).filter('effect == "support"').count()
-        harm = Impact.query.filter('Impact.app_id == app_id').filter(Impact.mitigation_id == m.id).filter('effect == "harm"').count()
+    for m in Mitigation.query.filter(Mitigation.app_id == app_id).all():
+        support = Impact.query.filter(Impact.app_id == app_id).filter(Impact.mitigation_id ==  m.id).filter('effect == "support"').count()
+        harm = Impact.query.filter(Impact.app_id == app_id).filter(Impact.mitigation_id == m.id).filter('effect == "harm"').count()
         if (support > harm and effect == 'support'):
             mitigations.append(m)
         elif (support < harm and effect == 'harm'):
