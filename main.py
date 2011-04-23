@@ -1,20 +1,10 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
 import sys
 import os
-import unittest
-from flask import Flask
 from flaskext.sqlalchemy import SQLAlchemy
 
-uri = 'sqlite:///test.db'
-
-def create_app():
-    app = Flask(__name__)
-    app.config['SQLALCHEMY_DATABASE_URI'] = uri
-    return app
-
-db = SQLAlchemy(create_app())
+db = SQLAlchemy()
 
 class Application(db.Model):
     id = db.Column(db.Integer, primary_key=True)

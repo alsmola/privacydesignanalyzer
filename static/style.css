@@ -55,7 +55,7 @@ body {
 font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
 color: #333;
 background: #d5e1ca;
-background-image: url('/static/tile.png');
+background-image: url('tile.png');
 background-repeat: repeat-x repeat-y;
 line-height: 1.4;
 }
@@ -316,7 +316,7 @@ padding: 10px 5px 5px 5px;
 float: right;
 width: 16px;
 height: 16px;
-background-image: url('/static/delete.png');
+background-image: url('delete.png');
 margin: -8px -4px 0 0;
 cursor: pointer;
 }

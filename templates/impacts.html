@@ -2,7 +2,7 @@
 {% block body %}
     <script type="text/javascript">
     function modifyImpact(app_id, mitigation_id, goal_id, effect, verb) {
-        $.post('/impact', 
+        $.post('impact', 
             {app_id:app_id, mitigation_id: mitigation_id, goal_id: goal_id, effect: effect, verb: verb},
             function(data) {
                 modifyImpactResult(data);
@@ -127,8 +127,8 @@
 {% endblock %}
 
 {% block nav %}
-    <a class="prev" href="/mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
-    <a class="next" href="/results?app_id={{ app_id }}">Next (Results) &gt;</a>
+    <a class="prev" href="mitigations?app_id={{ app_id }}">&lt; Prev (Mitigations)</a>
+    <a class="next" href="results?app_id={{ app_id }}">Next (Results) &gt;</a>
 {% endblock %}
 
 

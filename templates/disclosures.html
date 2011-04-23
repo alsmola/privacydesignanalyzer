@@ -18,7 +18,7 @@
             var fromActorId = $(data[0]).attr('id').split('-')[1];
             var datumId = $(data[1]).attr('id').split('-')[1];
             var toActorId = $(this).siblings('span').attr('id').split('-')[1];
-            $.post('/disclosure', 
+            $.post('disclosure', 
                 {app_id: app_id, from_actor_id: fromActorId, datum_id: datumId, to_actor_id: toActorId, flagged: flagged},
                 function(data) {
                     modifyDisclosureResult(data);
@@ -61,8 +61,8 @@
 {% endblock %}
 
 {% block nav %}
-    <a class="prev" href="/goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
-    <a class="next" href="/mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
+    <a class="prev" href="goals?app_id={{ app_id }}">&lt; Prev (Goals)</a>
+    <a class="next" href="mitigations?app_id={{ app_id }}">Next (Mitigations) &gt;</a>
 {% endblock %}
 
 {% macro checked(from_actor_id, datum_id, to_actor_id) %}

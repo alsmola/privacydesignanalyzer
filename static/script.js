@@ -44,7 +44,7 @@ function getItemHtml(name, type, id) {
         </form>\
         <div class="edit-delete">'
     if (type == 'application') {
-        html += '<a href="/actors?app_id=' + id + '"><span class="name">' + name + '</span></a>'
+        html += '<a href="actors?app_id=' + id + '"><span class="name">' + name + '</span></a>'
     } else {
         html += '<p class="name">' + name + '</p>'
     }
@@ -70,7 +70,7 @@ $(document).ready(function () {
         var name = $(this).children('.add-name').val();
         var parentId = $(this).siblings('.list').attr('id').split('-')[1];
         var type = $(this).children('.type').val();
-        $.post('/' + type,
+        $.post(type,
             { name : name, verb: 'create', id: -1, parent_id: parentId},
             function(data) {
                 addResult(data);
@@ -88,7 +88,7 @@ $(document).ready(function () {
         var type = $(this).parents('.item').attr('id').split('-')[0];
         var id = $(this).parents('.item').attr('id').split('-')[1];
         var parentId = $(this).parents('.list').attr('id').split('-')[1];
-        $.post('/' + type, 
+        $.post(type, 
             { name : name, verb: 'delete', id: id, parent_id: parentId},
             function(data) {
                 deleteResult(data);
@@ -121,7 +121,7 @@ $(document).ready(function () {
             $(this).parent().siblings('.edit-delete').fadeIn();
             return false;
         }
-        $.post('/' + type, 
+        $.post(type, 
             { name : name, newName: newName, verb: 'edit', id: id, parent_id: parentId},
             function(data) {
                 editResult(data);

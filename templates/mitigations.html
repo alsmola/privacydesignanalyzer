@@ -16,7 +16,7 @@
             var flagged = $(this).attr('checked');
             var category = $(this).siblings().text();
             var disclosure_id = $(this).parents('.mitigation-row').attr('id').split('-')[1];
-            $.post('/mitigation', 
+            $.post('mitigation', 
                 {app_id: app_id, disclosure_id: disclosure_id, category: category, flagged: flagged},
                 function(data) {
                     modifyMitigationResult(data);
@@ -53,8 +53,8 @@
 {% endblock %}
 
 {% block nav %}
-    <a class="prev" href="/disclosures?app_id={{ app_id }}">&lt; Prev (Disclosures)</a>
-    <a class="next" href="/impacts?app_id={{ app_id }}">Next (Impacts) &gt;</a>
+    <a class="prev" href="disclosures?app_id={{ app_id }}">&lt; Prev (Disclosures)</a>
+    <a class="next" href="impacts?app_id={{ app_id }}">Next (Impacts) &gt;</a>
 {% endblock %}
 
 {% macro checked(disclosure_id, category) %}

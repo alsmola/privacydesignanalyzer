@@ -2,8 +2,10 @@ from flask import Flask, render_template, request, session, jsonify
 from main import Application, Actor, Goal, Datum, Disclosure, Mitigation, Impact, db
 from flaskext.sqlalchemy import SQLAlchemy
 import main
-
 app = Flask(__name__)
+app.secret_key = 'development key'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+db.init_app(app)
 
 @app.route('/')
 def start():
@@ -116,7 +118,7 @@ def datum():
 @app.route('/disclosures')
 def disclosures():
     app_id = int(request.args['app_id'])
-    return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
+    return render_template('disclosures.html', actors = Actor.query.filter_by(app_id=app_id).order_by(Actor.id).all(), disclosures = Disclosure.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/disclosure', methods=['POST',])
 def disclosure():
@@ -159,7 +161,7 @@ def mitigation():
 @app.route('/impacts')
 def impacts():
     app_id = int(request.args['app_id'])
-    return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.filter_by(app_id=app_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
+    return render_template('impacts.html', impacts = Impact.query.filter_by(app_id=app_id).all(), mitigations = Mitigation.query.join('disclosure').filter_by(app_id=app_id).order_by(Disclosure.from_actor_id, Disclosure.datum_id, Disclosure.to_actor_id).all(), actors = Actor.query.filter_by(app_id=app_id).all(), app_id = app_id, app_name = Application.query.filter_by(id=app_id).first().name)
 
 @app.route('/impact', methods=['POST',])
 def impact():   
@@ -219,10 +221,7 @@ def test():
             for datum in actorData[actor.name]:
                 db.session.add(Datum(datum, actor.id))
         db.session.commit()
-    return 'Success: test'  
-
-
-app.secret_key = ''
+    return 'Success: test'
 
 if __name__ == '__main__':
     app.debug = True
