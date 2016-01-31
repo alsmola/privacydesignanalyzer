@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, jsonify
 from main import Application, Actor, Goal, Datum, Disclosure, Mitigation, Impact, db
-from flaskext.sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy
 import main
 app = Flask(__name__)
 app.secret_key = 'development key'
