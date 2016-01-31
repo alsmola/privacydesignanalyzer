@@ -8,9 +8,9 @@ To run, simply type:
 
     python front.py
 
-and browse to (http://localhost:5000).
+and browse to <http://localhost:5000>.
 
-You'll need to generate a test app - there is a method at (http://localhost:5000/test) to do this for you. Visit (http://localhost:5000/reset) to clear the database.
+You'll need to generate a test app - there is a method at <http://localhost:5000/test> to do this for you. Visit <http://localhost:5000/reset> to clear the database.
 
 To test the app, run the unit test:
     python unittests.py
