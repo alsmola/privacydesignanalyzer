@@ -17,4 +17,4 @@ To test the app, run the unit test:
 
 Screenshots
 ===========
-!(https://alexsmolen.comd/pda/static/pda1.png)
+![Screenshot of privacy design analyzer](https://alexsmolen.comd/pda/static/pda1.png)
