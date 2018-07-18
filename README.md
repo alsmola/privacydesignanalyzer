@@ -15,7 +15,3 @@ You'll need to generate a test app - there is a method at <http://localhost:5000
 To test the app, run the unit test:
 
     python unittests.py
-
-Screenshots
-===========
-![Screenshot of privacy design analyzer](https://alexsmolen.com/pda/static/pda1.png)
