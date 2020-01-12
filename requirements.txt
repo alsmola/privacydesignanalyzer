@@ -1,4 +1,4 @@
-Flask==0.10.1
+Flask==1.0
 Flask-SQLAlchemy==2.1
 Flask-Testing==0.4.2
 itsdangerous==0.24
